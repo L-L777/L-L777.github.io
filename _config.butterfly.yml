@@ -1,0 +1,285 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+
+# Site
+title: L.Lのblog
+subtitle: ''
+description: ''
+keywords:
+author: L.L
+language: zh-CN
+timezone: 'Asia/Shanghai'
+
+# URL
+## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
+url: http://example.com
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link:
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+
+# Home page setting
+# path: Root path for your blogs index page. (default = '')
+# per_page: Posts displayed per page. (0 = disable pagination)
+# order_by: Posts order. (Order by date descending by default)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Metadata elements
+## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+meta_generator: true
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+## updated_option supports 'mtime', 'date', 'empty'
+updated_option: 'mtime'
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 10
+pagination_dir: page
+
+# Include / Exclude file(s)
+## include:/exclude: options only apply to the 'source/' folder
+include:
+exclude:
+ignore:
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: butterfly
+
+# Deployment
+## Docs: https://hexo.io/docs/one-command-deployment
+deploy:
+  deploy: 
+
+	 type: git
+
+	 repository: https://github.com/L-L777/L-L777.github.io.git
+
+	 branch: main
+
+# A simple 404 page
+error_404:
+  enable: true
+  subtitle: "页面没有找到"
+  background: 
+
+nav:
+  # 導航欄 Logo 圖片
+  logo: 
+  # 是否顯示標題
+  display_title: true
+  # 是否固定導航欄
+  fixed: false
+
+menu:
+  首页: / || fas fa-home
+  时间轴: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+  List||fas fa-list:
+    Music: /music/ || fas fa-music
+    Movie: /movies/ || fas fa-video
+  链接: /link/ || fas fa-link
+  关于我: /about/ || fas fa-heart
+  搜索: /search/ || fas fa-search
+
+# Header Settings
+header:
+  enable: true
+  logo: /img/bgc4.jpg
+  banner: /img/bg.png
+# Top Image Settings
+top_img:
+  img: 	https://th.bing.com/th/id/OIP.WgWyX-w9l2Yolq1zUet2XgHaEo?w=203&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7
+
+#页面设置
+#代码框设置
+  # 主题：darker / pale night / light / ocean / mac / mac light / false
+highlight_theme: mac light
+ 
+# 是否支持复制
+highlight_copy: true # copy button
+ 
+# 是否显示代码语言
+highlight_lang: true # show the code language
+ 
+# 是否展开代码块
+highlight_shrink: false # true: shrink the code blocks / false: expand the code blocks | none: expand code blocks and hide the button
+ 
+# 代码块高度限制，超出后需手动展开
+highlight_height_limit: 200 # unit: px
+ 
+# 设置代码自动换行
+code_word_wrap: false
+
+#社交图标设置
+social:
+  fab fa-github: https://github.com/L-L777 || Github || '#24292e'
+  fab fa-qq: mailto:2040737734@qq.com || QQ || '#379be6'
+  fab fa-weixin: https://weixin.qq.com || WeChat || '#00ff00'
+
+  # 头像设置
+avatar:
+  img: /img/head.gif
+  effect: true # The avatar will keep rotating
+
+  #顶部图设置
+  # 设置为true后禁用顶部图片
+disable_top_img: false
+ 
+# 主页面的top_img
+index_img: /img/bg.jpg
+ 
+# 默认页面的top_img，如当前页未配置top_img时，则使用该配置
+default_top_img:	/img/bgc1.jpg
+
+#文章封面
+cover:
+  # 是否显示文章封面
+  index_enable: true
+  # 侧栏是否显示文章封面图
+  aside_enable: true
+  # 归档页面是否显示文章封面图
+  archives_enable: true
+  # 封面显示的位置
+  # 三个值可配置 left , right , both
+  position: both
+  # 当没有设置cover时，默认的封面显示，可配置多个
+  default_cover:
+    - /img/bgc2.jpg
+    - /img/bgc3.jpg
+
+#文章基础信息展示
+post_meta:
+  page: # Home Page
+    date_type: created # created or updated or both 主頁文章日期是創建日或者更新日或都顯示
+    date_format: date # date/relative 顯示日期還是相對日期
+    categories: true # true or false 主頁是否顯示分類
+    tags: false # true or false 主頁是否顯示標籤
+    label: true # true or false 顯示描述性文字
+  post:
+    date_type: both # created or updated or both 文章頁日期是創建日或者更新日或都顯示
+    date_format: date # date/relative 顯示日期還是相對日期
+    categories: true # true or false 文章頁是否顯示分類
+    tags: true # true or false 文章頁是否顯示標籤
+    label: true # true or false 顯示描述性文字
+
+#配置文章节选
+index_post_content:
+  method: 2
+  length: 500 # if you set method to 2 or 3, the length need to config
+
+  #复制权限配置
+  copy:
+  # 文章是否可复制
+  enable: true
+  copyright:
+    # 是否开启复制版权信息添加
+    enable: false
+    # 字数限制，当复制文字大于这个字数限制时，将在复制的内容后面加上版权信息
+    limit_count: 50
+
+#配置赞赏
+reward:
+  enable: true
+  text: 
+  QR_code:
+    - img: /img/wechat.png
+      link:
+      text: 微信
+    - img: /img/alipay.png
+      link:
+      text: 支付宝
+
+# 配置页脚
+footer:
+  background: /img/footer.gif
+  owner:
+    enable: true
+    # 站点搭建起始日期
+    since: 2024
+  # 自定义文本，可配置ICP信息：<a href="icp链接"><img class="icp-icon" src="icp图片"><span>备案号：xxxxxx</span></a>
+  custom_text: welcome to L.Lの blog
+  copyright: true # Copyright of theme and framework
+
+#夜间模式
+darkmode:
+  # 是否开启
+  enable: true
+  # Toggle Button to switch dark/light mode
+  # 是否显示按钮
+  button: true
+  # Switch dark/light mode automatically (自動切換 dark mode和 light mode)
+  # autoChangeMode: 1  Following System Settings, if the system doesn't support dark mode, it will switch dark mode between 6 pm to 6 am
+  # autoChangeMode: 2  Switch dark mode between 6 pm to 6 am
+  # autoChangeMode: false
+  # 是否自动切换
+  autoChangeMode: true
+  # Set the light mode time. The value is between 0 and 24. If not set, the default value is 6 and 18
+  start: # 8
+  end: # 22
+
+# 背景特效
+canvas_fluttering_ribbon:
+ enable: true
+ mobile: false # false 手机端不显示 true 手机端显示
+
+# 鼠标点击效果
+#烟花
+fireworks:
+  enable: true
+  zIndex: 9999 # -1 or 9999
+  mobile: false
