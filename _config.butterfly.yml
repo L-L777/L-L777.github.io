@@ -5,7 +5,7 @@
 
 # Site
 title: L.Lのblog
-subtitle: ''
+#subtitle: ''
 description: ''
 keywords:
 author: L.L
@@ -140,10 +140,31 @@ menu:
 header:
   enable: true
   logo: /img/bgc4.jpg
-  banner: /img/bg.png
+  banner: https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
 # Top Image Settings
 top_img:
-  img: 	https://th.bing.com/th/id/OIP.WgWyX-w9l2Yolq1zUet2XgHaEo?w=203&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7
+  img: 	https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
+
+# 主頁subtitle
+subtitle:
+  enable: false
+  # Typewriter Effect (打字效果)
+  effect: true
+  # Customize typed.js
+  # https://github.com/mattboldt/typed.js/#customization
+  typed_option:
+  # source 調用第三方服務
+  # false 關閉調用
+  # 1  調用一言網的一句話（簡體） https://hitokoto.cn/
+  # 2  調用一句網（簡體） http://yijuzhan.com/
+  # 3  調用今日詩詞（簡體） https://www.jinrishici.com/
+  # subtitle 會先顯示 source , 再顯示 sub 的內容
+  source: false
+  # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
+  sub:
+    - 今日事&#44;今日畢
+    - Never put off till tomorrow what you can do today
+    - 陌上花开，可缓缓归矣
 
 #页面设置
 #代码框设置
@@ -181,10 +202,10 @@ avatar:
 disable_top_img: false
  
 # 主页面的top_img
-index_img: /img/bg.jpg
+index_img: https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
  
 # 默认页面的top_img，如当前页未配置top_img时，则使用该配置
-default_top_img:	/img/bgc1.jpg
+default_top_img:	https://img2.baidu.com/it/u=3853414471,1028721537&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281
 
 #文章封面
 cover:
@@ -254,7 +275,8 @@ footer:
   # 自定义文本，可配置ICP信息：<a href="icp链接"><img class="icp-icon" src="icp图片"><span>备案号：xxxxxx</span></a>
   custom_text: welcome to L.Lの blog
   copyright: true # Copyright of theme and framework
-
+# footer是否顯示圖片背景(與top_img一致)
+footer_img: https://img2.baidu.com/it/u=3368405033,1886662875&fm=253&fmt=auto&app=138&f=JPEG?w=888&h=500
 #夜间模式
 darkmode:
   # 是否开启
