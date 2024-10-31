@@ -14,7 +14,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://l-l777.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -110,11 +110,32 @@ deploy:
 
 	 branch: main
 
+
+# 背景色
+# Inject
+# Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
+# 插入代码到头部 </head> 之前 和 底部 </body> 之前
+inject:
+  head:
+     - <link rel="stylesheet" href="/css/background.css">
+  bottom:
+    # - <script src="xxxx"></script>
+
+
+# Website Background (設置網站背景)
+# can set it to color or image (可設置圖片 或者 顔色)
+# The formal of image: url(http://xxxxxx.com/xxx.jpg)
+background: '#efefef'
+
+
 # A simple 404 page
 error_404:
   enable: true
   subtitle: "页面没有找到"
   background: 
+
+# Favicon（网站图标）
+favicon: https://img0.baidu.com/it/u=1538176586,3819719694&fm=253&fmt=auto&app=138&f=JPEG?w=220&h=289
 
 nav:
   # 導航欄 Logo 圖片
@@ -129,25 +150,49 @@ menu:
   时间轴: /archives/ || fas fa-archive
   标签: /tags/ || fas fa-tags
   分类: /categories/ || fas fa-folder-open
-  List||fas fa-list:
-    Music: /music/ || fas fa-music
-    Movie: /movies/ || fas fa-video
-  链接: /link/ || fas fa-link
   关于我: /about/ || fas fa-heart
-  搜索: /search/ || fas fa-search
+  # List||fas fa-list:
+  #   Music: /music/ || fas fa-music
+  #   Movie: /movies/ || fas fa-video
+  链接: /link/ || fas fa-link
+  # 搜索: /search/ || fas fa-search
+
+# 搜索功能
+search:
+  use: local_search
+#   path: search.xml
+#   field: post
+#   content: true
+#   format: html
+#   limit: 10000
+
+local_search:
+  enable: true
+  labels:
+    input_placeholder: Search for Posts
+    hits_empty: "We didn't find any results for the search: ${query}" # if there are no result
+  # Preload the search data when the page loads.
+  preload: false
+  # Show top n results per article, show all results by setting to -1
+  top_n_per_article: 1
+  # Unescape html strings to the readable one.
+  unescape: true
+  CDN:
+
 
 # Header Settings
 header:
   enable: true
-  logo: /img/bgc4.jpg
+  logo: 
   banner: https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
 # Top Image Settings
 top_img:
-  img: 	https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
+  img: 	https://picx.zhimg.com/v2-01ed89a046098b285c04c4bae77d8f76_r.jpg?source=172ae18b
+# https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
 
 # 主頁subtitle
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect (打字效果)
   effect: true
   # Customize typed.js
@@ -166,6 +211,44 @@ subtitle:
     - Never put off till tomorrow what you can do today
     - 陌上花开，可缓缓归矣
 
+# 侧边栏设置
+aside:
+  enable: true
+  hide: false
+  button: true
+  mobile: true # display on mobile
+  position: right # left or right 我的是右边 
+  # 个人信息
+  card_author:
+    enable: true
+    description:
+    button:
+      enable: true
+      icon: fab fa-github
+      text: Follow Me #按钮文字
+      link:  https://github.com/L-L777
+  # 公告栏设置
+  card_announcement:
+    enable: true
+    content: 本站为L.L的个人博客网
+    # Toc目录
+  toc:
+    enable: true
+    number: true
+    #style_simple: false
+    auto_open: true # auto open the sidebar
+# social settings (社交圖標設置)
+# formal:
+#        icon: link || the description
+#书写格式：图标名：url || 描述性文字`
+#社交图标设置
+social:
+   fab fa-github:  https://github.com/L-L777 || Github || '#24292e'
+   fab fa-qq:  tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=728831102&website=www.oicqzone.com || QQ|| '#379be6'
+   fab fa-weixin: https://weixin.qq.com || WeChat|| '#00ff00'
+
+
+
 #页面设置
 #代码框设置
   # 主题：darker / pale night / light / ocean / mac / mac light / false
@@ -181,16 +264,12 @@ highlight_lang: true # show the code language
 highlight_shrink: false # true: shrink the code blocks / false: expand the code blocks | none: expand code blocks and hide the button
  
 # 代码块高度限制，超出后需手动展开
-highlight_height_limit: 200 # unit: px
+highlight_height_limit: 200px # unit: px
  
 # 设置代码自动换行
 code_word_wrap: false
 
-#社交图标设置
-social:
-  fab fa-github: https://github.com/L-L777 || Github || '#24292e'
-  fab fa-qq: mailto:2040737734@qq.com || QQ || '#379be6'
-  fab fa-weixin: https://weixin.qq.com || WeChat || '#00ff00'
+
 
   # 头像设置
 avatar:
@@ -202,10 +281,10 @@ avatar:
 disable_top_img: false
  
 # 主页面的top_img
-index_img: https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11f…_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_auto
+index_img: https://picx.zhimg.com/v2-01ed89a046098b285c04c4bae77d8f76_r.jpg?source=172ae18b
  
 # 默认页面的top_img，如当前页未配置top_img时，则使用该配置
-default_top_img:	https://img2.baidu.com/it/u=3853414471,1028721537&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281
+default_top_img:	https://img0.baidu.com/it/u=885709517,362819010&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800
 
 #文章封面
 cover:
@@ -220,8 +299,9 @@ cover:
   position: both
   # 当没有设置cover时，默认的封面显示，可配置多个
   default_cover:
-    - /img/bgc2.jpg
-    - /img/bgc3.jpg
+    - https://img0.baidu.com/it/u=1725512239,3835499087&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500
+    - https://img1.baidu.com/it/u=1211742471,3915088278&fm=253&fmt=auto&app=120&f=JPEG?w=1299&h=800
+    - https://img2.baidu.com/it/u=3853414471,1028721537&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281
 
 #文章基础信息展示
 post_meta:
@@ -247,11 +327,32 @@ index_post_content:
   copy:
   # 文章是否可复制
   enable: true
-  copyright:
-    # 是否开启复制版权信息添加
-    enable: false
-    # 字数限制，当复制文字大于这个字数限制时，将在复制的内容后面加上版权信息
-    limit_count: 50
+copyright:
+  # 是否开启复制版权信息添加
+  enable: true
+  # 字数限制，当复制文字大于这个字数限制时，将在复制的内容后面加上版权信息
+  limit_count: 50
+  copyright_url: https://l-l777.github.io/
+  copyright_author_href: https://l-l777.github.io/
+  copyright_author: L.L
+  copyright_info: 此文章版权归L.L所有，如有转载，请注明来自原作者
+  
+# 配置文章版权信息
+post_copyright:
+  # 是否启用版权声明
+  enable: true
+  # 是否进行文章 URL 解码
+  decode: true
+  # 作者链接
+  author_href: https://l-l777.github.io/
+  # 许可证类型
+  license: CC BY-NC-SA 4.0
+  # 许可证链接
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  copyright_url: https://l-l777.github.io/
+  copyright_author_href: https://l-l777.github.io/
+
+
 
 #配置赞赏
 reward:
@@ -294,10 +395,30 @@ darkmode:
   start: # 8
   end: # 22
 
+# 图片懒加载
+lazyload:
+  enable: true
+  onlypost: false 
+  loadingImg: https://img2.baidu.com/it/u=1899496864,4228245210&fm=253&fmt=auto&app=138&f=GIF?w=836&h=418
+
+
 # 背景特效
+# 动态彩带
 canvas_fluttering_ribbon:
  enable: true
  mobile: false # false 手机端不显示 true 手机端显示
+
+#星空特效
+# canvas_nest
+# https://github.com/hustcc/canvas-nest.js
+# canvas_nest:
+#   enable: true
+#   color: '0,0,255' #color of lines, default: '0,0,0'; RGB values: (R,G,B).(note: use ',' to separate.)
+#   opacity: 0.7 # the opacity of line (0~1), default: 0.5.
+#   zIndex: -1 # z-index property of the background, default: -1.
+#   count: 99 # the number of lines, default: 99.
+#   mobile: false
+
 
 # 鼠标点击效果
 #烟花
@@ -305,3 +426,39 @@ fireworks:
   enable: true
   zIndex: 9999 # -1 or 9999
   mobile: false
+
+# Typewriter Effect (打字效果)
+# https://github.com/disjukr/activate-power-mode
+activate_power_mode:
+  enable: true
+  colorful: true # open particle animation (冒光特效)
+  shake: true #  open shake (抖動特效)
+  mobile: true
+
+# 加載動畫 Loading Animation
+preloader:
+  enable: false
+  # source
+  # 1. fullpage-loading
+  # 2. pace (progress bar)
+  source: 1
+  # pace theme (see https://codebyzach.github.io/pace/)
+  pace_css_url: https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.css
+
+# 动画加载效果
+wowjs:
+  enable: true #控制动画开关。true是打开，false是关闭
+  priority: 10 #过滤器优先级
+  mobile: false #移动端是否启用，默认移动端禁用
+  animateitem:
+    - class: recent-post-item #必填项，需要添加动画的元素的class
+      style: animate__zoomIn #必填项，需要添加的动画
+      duration: 1s #选填项，动画持续时间，单位可以是ms也可以是s。例如3s，700ms。
+      delay: 0s #选填项，动画开始的延迟时间，单位可以是ms也可以是s。例如3s，700ms。
+      offset: 100 #选填项，开始动画的距离（相对浏览器底部）
+      iteration: 1 #选填项，动画重复的次数
+    - class: card-widget
+      style: animate__zoomIn
+  animate_css: https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css
+  wow_js: https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js
+  wow_init_js: https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js
