@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>GSAP时间线Timeline | L.Lのblog</title><meta name="author" content="L.L"><meta name="copyright" content="L.L"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="时间轴时间轴是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**delay** 。例如： 12345&#x2F;&#x2F; WITHOUT Timelines (only using tweens with delays):gsap.to(&quot;#id&quot;, &#123; x: 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GSAP时间线Timeline">
+<meta property="og:url" content="https://l-l777.github.io/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/index.html">
+<meta property="og:site_name" content="L.Lのblog">
+<meta property="og:description" content="时间轴时间轴是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**delay** 。例如： 12345&#x2F;&#x2F; WITHOUT Timelines (only using tweens with delays):gsap.to(&quot;#id&quot;, &#123; x: 1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img0.baidu.com/it/u=2064138448,2586463179&fm=253&fmt=auto&app=138&f=JPEG?w=1000&h=500">
+<meta property="article:published_time" content="2024-11-04T12:43:53.000Z">
+<meta property="article:modified_time" content="2024-11-04T12:44:27.864Z">
+<meta property="article:author" content="L.L">
+<meta property="article:tag" content="GSAP">
+<meta property="article:tag" content="动画库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img0.baidu.com/it/u=2064138448,2586463179&fm=253&fmt=auto&app=138&f=JPEG?w=1000&h=500"><link rel="shortcut icon" href="https://img0.baidu.com/it/u=1538176586,3819719694&fm=253&fmt=auto&app=138&f=JPEG?w=220&h=289"><link rel="canonical" href="https://l-l777.github.io/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'GSAP时间线Timeline',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-04 20:44:27'
+}</script><link rel="stylesheet" href="/css/background.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.gif" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://img2.baidu.com/it/u=3205109182,3319667232&amp;fm=253&amp;fmt=auto&amp;app=120&amp;f=JPEG?w=750&amp;h=50);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">L.Lのblog</span></a><a class="nav-page-title" href="/"><span class="site-name">GSAP时间线Timeline</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">GSAP时间线Timeline</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-04T12:43:53.000Z" title="发表于 2024-11-04 20:43:53">2024-11-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-04T12:44:27.864Z" title="更新于 2024-11-04 20:44:27">2024-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/GSAP/">GSAP</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="时间轴"><a href="#时间轴" class="headerlink" title="时间轴"></a>时间轴</h1><p><a target="_blank" rel="noopener" href="https://gsap.com/docs/v3/GSAP/Timeline"><strong>时间轴</strong></a>是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**<code>delay</code>** 。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// WITHOUT Timelines (only using tweens with delays):</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; x: 100, duration: 1 &#125;);</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; y: 50, duration: 1, delay: 1 &#125;);//wait 1 second</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; opacity: 0, duration: 1, delay: 2 &#125;);//wait 2 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果您想让第一个动画更长怎么办？此后您需要调整<em>每次</em>延迟。如果您想**<code>pause()</code><strong>整个序列或</strong><code>restart()</code><strong>它或</strong><code>reverse()</code>**它即时或重复两次怎么办？这可能会变得相当混乱，但 GSAP 的时间表使其变得异常简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//WITH Timelines (cleaner, more versatile)</span><br><span class="line">var tl = gsap.timeline(&#123;repeat: 2, repeatDelay: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;x: 100, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;y: 50, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;opacity: 0, duration: 1&#125;);</span><br><span class="line"></span><br><span class="line">// then we can control the whole thing easily...</span><br><span class="line">tl.pause();</span><br><span class="line">tl.resume();</span><br><span class="line">tl.seek(1.5);</span><br><span class="line">tl.reverse();</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>现在我们可以调整时间，而不必担心延迟的影响！增加第一个补间的持续时间，一切都会自动调整。</p>
+<h1 id="在时间轴中定位动画"><a href="#在时间轴中定位动画" class="headerlink" title="在时间轴中定位动画"></a>在<a target="_blank" rel="noopener" href="https://gsap.com/docs/v3/GSAP/Timeline#positioning-animations-in-a-timeline"><strong>时间轴</strong></a>中定位动画</h1><p>默认情况下，动画会添加到时间线的<strong>末尾</strong>，以便它们按顺序排列，但您可以使用<a target="_blank" rel="noopener" href="https://gsap.com/resources/position-parameter"><strong>位置参数</strong></a>来精确控制事物的放置位置。它通常位于<strong>vars</strong>参数之后，并使用带有以下选项的灵活语法：</p>
+<ul>
+<li>从时间线开始测量的<strong>绝对时间</strong>（以秒为单位），作为<strong>数字，</strong>如**<code>3</code>**</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// insert exactly 3 seconds from the start of the timeline</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, 3);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>标签</strong>，例如**<code>&quot;someLabel&quot;</code>** 。<em>如果标签不存在，它将被添加到时间线的末尾。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// insert at the &quot;someLabel&quot; label</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;someLabel&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>&quot;&lt;&quot;</code><strong>上一个动画的</strong>开始</strong><em>。</em>将**<code>&lt;</code>*<em>视为返回上一个动画开头的指针。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// insert at the START of the  previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&lt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>&quot;&gt;&quot;</code></strong> - 上一个动画的<strong>结束</strong><em>。</em>将**<code>&gt;</code>*<em>视为指向上一个动画结尾的指针。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// insert at the END of the previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&gt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>复杂字符串，其中**<code>&quot;+=&quot;</code><strong>和</strong><code>&quot;-=&quot;</code><strong>前缀表示</strong>相对<strong>值。*当</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>后面有数字时，它被解释为相对数字，因此</strong><code>&quot;&lt;2&quot;</code><strong>与</strong><code>&quot;&lt;+=2&quot;</code>*<em>相同。</em>示例：<ul>
+<li><strong><code>&quot;+=1&quot;</code></strong> - 时间线结束后 1 秒（创建间隙）</li>
+<li><strong><code>&quot;-=1&quot;</code></strong> - 时间线结束前 1 秒（重叠）</li>
+<li><strong><code>&quot;myLabel+=2&quot;</code></strong> - 标签**<code>&quot;myLabel&quot;</code>**过去 2 秒</li>
+<li><strong><code>&quot;&lt;+=3&quot;</code></strong> - 上一个动画开始后 3 秒</li>
+<li><strong><code>&quot;&lt;3&quot;</code></strong> - 与**<code>&quot;&lt;+=3&quot;</code>**相同（见上文）（ **<code>&quot;+=&quot;</code><strong>在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code>**后面时隐含）</li>
+<li><strong><code>&quot;&gt;-0.5&quot;</code></strong> - 上一个动画结束前 0.5 秒。就像说<em>“上一个动画的结尾加-0.5”</em></li>
+</ul>
+</li>
+<li>基于<strong>百分比</strong>的复杂字符串。当紧跟在**<code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>前缀之后时，百分比基于所</strong>插入动画<strong>的<a target="_blank" rel="noopener" href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。当紧跟在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>之后时，它基于上</strong>一个动画*<em>的<a target="_blank" rel="noopener" href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。</em>注意：总持续时间包括重复&#x2F;溜溜*。示例：<ul>
+<li><strong><code>&quot;-=25%&quot;</code></strong> - 与时间线末尾重叠插入动画总持续时间的 25%</li>
+<li><strong><code>&quot;+=50%&quot;</code></strong> - 超出时间线末尾插入动画总持续时间的 50%，从而创建间隙</li>
+<li><strong><code>&quot;&lt;25%&quot;</code></strong> - 进入上一个动画的 25%（从开始处算起）。与**<code>&quot;&gt;-75%&quot;</code><strong>相同，与上一个动画</strong>结束**时相比负 75%。</li>
+<li><strong><code>&quot;&lt;+=25%&quot;</code></strong> - 上一个动画开始之后插入动画总持续时间的 25%。与**<code>&quot;&lt;25%&quot;</code><strong>不同，“&lt;25%”的百分比基于</strong>前一个动画的<strong>总持续时间，而紧随</strong><code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>之后的任何内容都基于</strong>插入动画的**总持续时间。</li>
+<li><strong><code>&quot;myLabel+=30%&quot;</code></strong> - 插入动画总持续时间超过标签**<code>&quot;myLabel&quot;</code>**的 30%。</li>
+</ul>
+</li>
+</ul>
+<h1 id="特殊属性"><a href="#特殊属性" class="headerlink" title="特殊属性"></a>特殊属性</h1><p>以下是一些GSAP时间线的常用特殊属性：</p>
+<ul>
+<li>**<code>repeat</code>**：动画重复的次数。如果设置为 <code>1</code>，则动画会无限重复。</li>
+<li>**<code>repeatDelay</code>**：两次重复之间的间隔时间（以秒为单位）。</li>
+<li>**<code>yoyo</code>**：如果为 <code>true</code>，则每次重复播放都会前后交替进行，使得动画来回运动，类似于溜溜球。</li>
+<li>**<code>delay</code>**：时间轴开始之前的延迟（以秒为单位）。</li>
+<li>**<code>onComplete</code>**：时间线播放完毕后调用的函数。</li>
+<li>**<code>defaults</code>**：可以设置默认值，这样在时间线中创建的每个动画都会继承这些默认值，如 <code>duration</code> 和 <code>ease</code>。</li>
+<li>**<code>onRepeat</code>**：在每次重复时调用的函数。</li>
+<li>**<code>onReverseComplete</code>**：当时间线反向播放完成时调用的函数。</li>
+</ul>
+<h2 id="Getter-Setter-方法"><a href="#Getter-Setter-方法" class="headerlink" title="Getter &#x2F; Setter 方法"></a>Getter &#x2F; Setter 方法</h2><p>时间线提供了一些方法来获取或设置时间线的状态：</p>
+<ul>
+<li>**<code>time()</code>**：播放头的本地位置（当前时间，以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
+<li>**<code>progress()</code>**：介于0和1之间的值，指示播放头的位置，其中0处在开始位置，0.5处在中途完成，1处在结束位置。</li>
+<li>**<code>duration()</code>**：动画的持续时间（以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
+<li>**<code>delay()</code>**：动画的初始延迟（动画开始之前的时间长度，以秒为单位）。</li>
+</ul>
+<h2 id="嵌套时间线"><a href="#嵌套时间线" class="headerlink" title="嵌套时间线"></a>嵌套时间线</h2><p>你可以在时间线中嵌套另一个时间线，这样可以模块化你的代码，使其更易于维护。例如：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> master = gsap.<span class="title function_">timeline</span>();</span><br><span class="line">master.<span class="title function_">add</span>(<span class="title function_">intro</span>()).<span class="title function_">add</span>(<span class="title function_">middle</span>(), <span class="string">&quot;+=2&quot;</span>).<span class="title function_">add</span>(<span class="title function_">conclusion</span>(), <span class="string">&quot;-=1&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他时间线特性"><a href="#其他时间线特性" class="headerlink" title="其他时间线特性"></a>其他时间线特性</h2><ul>
+<li>**<code>timeScale()</code>**：可以加速或减慢整个时间线的播放速度。</li>
+<li>**<code>progress()</code> 或 <code>totalProgress()</code>**：获取时间线的进度，<code>totalProgress()</code> 包括任何重复。</li>
+<li>**<code>killTweensOf()</code>**：杀死特定对象内的时间线动画。</li>
+<li>**<code>getTweensOf()</code>**：获取特定对象的动画。</li>
+<li>**<code>getChildren()</code>**：获取时间线中的所有动画和时间线。</li>
+<li><strong><code>currentLabel()</code></strong> 或 <strong><code>nextLabel()</code></strong> 和 **<code>previousLabel()</code>**：获取或查找时间线中特定位置的标签。</li>
+</ul>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> tl = gsap.<span class="title function_">timeline</span>(&#123;</span><br><span class="line">  <span class="attr">repeat</span>: <span class="number">3</span>,</span><br><span class="line">  <span class="attr">repeatDelay</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">onComplete</span>: myFunction</span><br><span class="line">&#125;);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">1</span>, <span class="attr">x</span>: <span class="number">200</span>, <span class="attr">y</span>: <span class="number">100</span> &#125;);</span><br><span class="line">tl.<span class="title function_">addLabel</span>(<span class="string">&quot;spin&quot;</span>, <span class="number">3</span>);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">2</span>, <span class="attr">rotation</span>: <span class="string">&quot;+=360&quot;</span> &#125;, <span class="string">&quot;spin&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>通过这些属性和方法，你可以创建复杂的动画序列，精确控制动画的播放、重复和回调。GSAP的时间线功能非常强大，能够满足大多数复杂的动画需求。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://l-l777.github.io/">L.L</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://l-l777.github.io/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/">https://l-l777.github.io/2024/11/04/GSAP时间线Timeline/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://l-l777.github.io" target="_blank">L.Lのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GSAP/">GSAP</a><a class="post-meta__tags" href="/tags/%E5%8A%A8%E7%94%BB%E5%BA%93/">动画库</a></div><div class="post-share"><div class="social-share" data-image="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/alipay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2024/11/04/GSAP%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" title="GSAP基础入门"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">GSAP基础入门</div></div><div class="info-2"><div class="info-item-1">补间动画：这里有四种类型的动画补间： • gsap.to()这个是最常见的，指元素从当前状态开始，到定义的状态结束的动画 1gsap.to(&quot;.circle&quot;, &#123; x: 40, fill: &#x27;blue&#x27;, &#125;)  • gsap.from()元素从from定义的状态开始移动到当前现有状态结束动画 12gsap.from(&quot;.circle&quot;, &#123; x: -40, fill: &#x27;blue&#x27;, &#125;);  • gsap.fromTo()定义起始点状态和终点状态进行动画 12gsap.fromTo( &quot;.circle&quot;,&#123; x: -40, fill: &#x27;blue&#x27;, &#125;, &#123; x: 40, fill: &#x27;green&#x27; &#125;);  • gsap.set()直接跳转到set的状态，无动画化 12gsap.set(&quot;.circle&quot;, &#123; x:...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/04/GSAP%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" title="GSAP基础入门"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&fm=253&fmt=auto&app=138&f=JPEG?w=1000&h=500" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-04</div><div class="info-item-2">GSAP基础入门</div></div><div class="info-2"><div class="info-item-1">补间动画：这里有四种类型的动画补间： • gsap.to()这个是最常见的，指元素从当前状态开始，到定义的状态结束的动画 1gsap.to(&quot;.circle&quot;, &#123; x: 40, fill: &#x27;blue&#x27;, &#125;)  • gsap.from()元素从from定义的状态开始移动到当前现有状态结束动画 12gsap.from(&quot;.circle&quot;, &#123; x: -40, fill: &#x27;blue&#x27;, &#125;);  • gsap.fromTo()定义起始点状态和终点状态进行动画 12gsap.fromTo( &quot;.circle&quot;,&#123; x: -40, fill: &#x27;blue&#x27;, &#125;, &#123; x: 40, fill: &#x27;green&#x27; &#125;);  • gsap.set()直接跳转到set的状态，无动画化 12gsap.set(&quot;.circle&quot;, &#123; x:...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.gif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">L.L</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/L-L777"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/L-L777" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #379be6;"></i></a><a class="social-icon" href="https://weixin.qq.com" target="_blank" title="WeChat"><i class="fab fa-weixin" style="color: #00ff00;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站为L.L的个人博客网</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E8%BD%B4"><span class="toc-number">1.</span> <span class="toc-text">时间轴</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E6%97%B6%E9%97%B4%E8%BD%B4%E4%B8%AD%E5%AE%9A%E4%BD%8D%E5%8A%A8%E7%94%BB"><span class="toc-number">2.</span> <span class="toc-text">在时间轴中定位动画</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E5%B1%9E%E6%80%A7"><span class="toc-number">3.</span> <span class="toc-text">特殊属性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getter-Setter-%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">Getter &#x2F; Setter 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B5%8C%E5%A5%97%E6%97%B6%E9%97%B4%E7%BA%BF"><span class="toc-number">3.2.</span> <span class="toc-text">嵌套时间线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%97%B6%E9%97%B4%E7%BA%BF%E7%89%B9%E6%80%A7"><span class="toc-number">3.3.</span> <span class="toc-text">其他时间线特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">3.3.1.</span> <span class="toc-text">示例代码</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/" title="GSAP时间线Timeline"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GSAP时间线Timeline"/></a><div class="content"><a class="title" href="/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/" title="GSAP时间线Timeline">GSAP时间线Timeline</a><time datetime="2024-11-04T12:43:53.000Z" title="发表于 2024-11-04 20:43:53">2024-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/04/GSAP%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" title="GSAP基础入门"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GSAP基础入门"/></a><div class="content"><a class="title" href="/2024/11/04/GSAP%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" title="GSAP基础入门">GSAP基础入门</a><time datetime="2024-11-04T08:27:36.000Z" title="发表于 2024-11-04 16:27:36">2024-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80websocket/" title="小程序项目配置---全局websocket"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=PNG?w=320&amp;h=320" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小程序项目配置---全局websocket"/></a><div class="content"><a class="title" href="/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80websocket/" title="小程序项目配置---全局websocket">小程序项目配置---全局websocket</a><time datetime="2024-10-30T13:18:06.000Z" title="发表于 2024-10-30 21:18:06">2024-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80request%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="小程序项目配置---全局request及错误处理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=PNG?w=320&amp;h=320" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小程序项目配置---全局request及错误处理"/></a><div class="content"><a class="title" href="/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80request%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="小程序项目配置---全局request及错误处理">小程序项目配置---全局request及错误处理</a><time datetime="2024-10-30T13:15:24.000Z" title="发表于 2024-10-30 21:15:24">2024-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/30/react%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80axios%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="react项目配置---全局axios及错误处理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=4217862599,249725046&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1500&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="react项目配置---全局axios及错误处理"/></a><div class="content"><a class="title" href="/2024/10/30/react%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80axios%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="react项目配置---全局axios及错误处理">react项目配置---全局axios及错误处理</a><time datetime="2024-10-30T13:11:11.000Z" title="发表于 2024-10-30 21:11:11">2024-10-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://img2.baidu.com/it/u=3368405033,1886662875&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=888&amp;h=500);"><div id="footer-wrap"><div class="copyright">&copy;2024 By L.L</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">welcome to L.Lの blog</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
