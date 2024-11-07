@@ -9,6 +9,9 @@ categories:
 top_img: https://img0.baidu.com/it/u=1421480513,129599327&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500
 cover: https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138&f=PNG?w=320&h=320
 ---
+# 全局websocket（微信小程序）
+
+以下是对小程序项目进行全局websocket配置
 
 ```jsx
 //websocket.js

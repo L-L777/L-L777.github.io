@@ -9,6 +9,10 @@ categories:
 top_img: https://img0.baidu.com/it/u=2748342842,876019850&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500
 cover:  https://img0.baidu.com/it/u=4217862599,249725046&fm=253&fmt=auto&app=138&f=JPEG?w=1500&h=500
 ---
+# 全局axios及错误处理（react）
+
+以下是对项目进行全局axios配置及错误处理，以react为例
+
 ```jsx
 //src/utils/axios.js
 import axios from "axios";
