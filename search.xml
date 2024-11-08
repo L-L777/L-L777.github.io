@@ -1,116 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/10/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>GSAP时间线Timeline</title>
-    <url>/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/</url>
-    <content><![CDATA[<h1 id="时间轴"><a href="#时间轴" class="headerlink" title="时间轴"></a>时间轴</h1><p><a href="https://gsap.com/docs/v3/GSAP/Timeline"><strong>时间轴</strong></a>是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**<code>delay</code>** 。例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// WITHOUT Timelines (only using tweens with delays):</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; x: 100, duration: 1 &#125;);</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; y: 50, duration: 1, delay: 1 &#125;);//wait 1 second</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; opacity: 0, duration: 1, delay: 2 &#125;);//wait 2 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如果您想让第一个动画更长怎么办？此后您需要调整<em>每次</em>延迟。如果您想**<code>pause()</code><strong>整个序列或</strong><code>restart()</code><strong>它或</strong><code>reverse()</code>**它即时或重复两次怎么办？这可能会变得相当混乱，但 GSAP 的时间表使其变得异常简单：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//WITH Timelines (cleaner, more versatile)</span><br><span class="line">var tl = gsap.timeline(&#123;repeat: 2, repeatDelay: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;x: 100, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;y: 50, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;opacity: 0, duration: 1&#125;);</span><br><span class="line"></span><br><span class="line">// then we can control the whole thing easily...</span><br><span class="line">tl.pause();</span><br><span class="line">tl.resume();</span><br><span class="line">tl.seek(1.5);</span><br><span class="line">tl.reverse();</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>现在我们可以调整时间，而不必担心延迟的影响！增加第一个补间的持续时间，一切都会自动调整。</p>
-<h1 id="在时间轴中定位动画"><a href="#在时间轴中定位动画" class="headerlink" title="在时间轴中定位动画"></a>在<a href="https://gsap.com/docs/v3/GSAP/Timeline#positioning-animations-in-a-timeline"><strong>时间轴</strong></a>中定位动画</h1><p>默认情况下，动画会添加到时间线的<strong>末尾</strong>，以便它们按顺序排列，但您可以使用<a href="https://gsap.com/resources/position-parameter"><strong>位置参数</strong></a>来精确控制事物的放置位置。它通常位于<strong>vars</strong>参数之后，并使用带有以下选项的灵活语法：</p>
-<ul>
-<li>从时间线开始测量的<strong>绝对时间</strong>（以秒为单位），作为<strong>数字，</strong>如**<code>3</code>**</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert exactly 3 seconds from the start of the timeline</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, 3);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>标签</strong>，例如**<code>&quot;someLabel&quot;</code>** 。<em>如果标签不存在，它将被添加到时间线的末尾。</em></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the &quot;someLabel&quot; label</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;someLabel&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>&quot;&lt;&quot;</code><strong>上一个动画的</strong>开始</strong><em>。</em>将**<code>&lt;</code>*<em>视为返回上一个动画开头的指针。</em></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the START of the  previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&lt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>&quot;&gt;&quot;</code></strong> - 上一个动画的<strong>结束</strong><em>。</em>将**<code>&gt;</code>*<em>视为指向上一个动画结尾的指针。</em></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the END of the previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&gt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>复杂字符串，其中**<code>&quot;+=&quot;</code><strong>和</strong><code>&quot;-=&quot;</code><strong>前缀表示</strong>相对<strong>值。*当</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>后面有数字时，它被解释为相对数字，因此</strong><code>&quot;&lt;2&quot;</code><strong>与</strong><code>&quot;&lt;+=2&quot;</code>*<em>相同。</em>示例：<ul>
-<li><strong><code>&quot;+=1&quot;</code></strong> - 时间线结束后 1 秒（创建间隙）</li>
-<li><strong><code>&quot;-=1&quot;</code></strong> - 时间线结束前 1 秒（重叠）</li>
-<li><strong><code>&quot;myLabel+=2&quot;</code></strong> - 标签**<code>&quot;myLabel&quot;</code>**过去 2 秒</li>
-<li><strong><code>&quot;&lt;+=3&quot;</code></strong> - 上一个动画开始后 3 秒</li>
-<li><strong><code>&quot;&lt;3&quot;</code></strong> - 与**<code>&quot;&lt;+=3&quot;</code>**相同（见上文）（ **<code>&quot;+=&quot;</code><strong>在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code>**后面时隐含）</li>
-<li><strong><code>&quot;&gt;-0.5&quot;</code></strong> - 上一个动画结束前 0.5 秒。就像说<em>“上一个动画的结尾加-0.5”</em></li>
-</ul>
-</li>
-<li>基于<strong>百分比</strong>的复杂字符串。当紧跟在**<code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>前缀之后时，百分比基于所</strong>插入动画<strong>的<a href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。当紧跟在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>之后时，它基于上</strong>一个动画*<em>的<a href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。</em>注意：总持续时间包括重复&#x2F;溜溜*。示例：<ul>
-<li><strong><code>&quot;-=25%&quot;</code></strong> - 与时间线末尾重叠插入动画总持续时间的 25%</li>
-<li><strong><code>&quot;+=50%&quot;</code></strong> - 超出时间线末尾插入动画总持续时间的 50%，从而创建间隙</li>
-<li><strong><code>&quot;&lt;25%&quot;</code></strong> - 进入上一个动画的 25%（从开始处算起）。与**<code>&quot;&gt;-75%&quot;</code><strong>相同，与上一个动画</strong>结束**时相比负 75%。</li>
-<li><strong><code>&quot;&lt;+=25%&quot;</code></strong> - 上一个动画开始之后插入动画总持续时间的 25%。与**<code>&quot;&lt;25%&quot;</code><strong>不同，“&lt;25%”的百分比基于</strong>前一个动画的<strong>总持续时间，而紧随</strong><code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>之后的任何内容都基于</strong>插入动画的**总持续时间。</li>
-<li><strong><code>&quot;myLabel+=30%&quot;</code></strong> - 插入动画总持续时间超过标签**<code>&quot;myLabel&quot;</code>**的 30%。</li>
-</ul>
-</li>
-</ul>
-<h1 id="特殊属性"><a href="#特殊属性" class="headerlink" title="特殊属性"></a>特殊属性</h1><p>以下是一些GSAP时间线的常用特殊属性：</p>
-<ul>
-<li>**<code>repeat</code>**：动画重复的次数。如果设置为 <code>1</code>，则动画会无限重复。</li>
-<li>**<code>repeatDelay</code>**：两次重复之间的间隔时间（以秒为单位）。</li>
-<li>**<code>yoyo</code>**：如果为 <code>true</code>，则每次重复播放都会前后交替进行，使得动画来回运动，类似于溜溜球。</li>
-<li>**<code>delay</code>**：时间轴开始之前的延迟（以秒为单位）。</li>
-<li>**<code>onComplete</code>**：时间线播放完毕后调用的函数。</li>
-<li>**<code>defaults</code>**：可以设置默认值，这样在时间线中创建的每个动画都会继承这些默认值，如 <code>duration</code> 和 <code>ease</code>。</li>
-<li>**<code>onRepeat</code>**：在每次重复时调用的函数。</li>
-<li>**<code>onReverseComplete</code>**：当时间线反向播放完成时调用的函数。</li>
-</ul>
-<h2 id="Getter-Setter-方法"><a href="#Getter-Setter-方法" class="headerlink" title="Getter &#x2F; Setter 方法"></a>Getter &#x2F; Setter 方法</h2><p>时间线提供了一些方法来获取或设置时间线的状态：</p>
-<ul>
-<li>**<code>time()</code>**：播放头的本地位置（当前时间，以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
-<li>**<code>progress()</code>**：介于0和1之间的值，指示播放头的位置，其中0处在开始位置，0.5处在中途完成，1处在结束位置。</li>
-<li>**<code>duration()</code>**：动画的持续时间（以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
-<li>**<code>delay()</code>**：动画的初始延迟（动画开始之前的时间长度，以秒为单位）。</li>
-</ul>
-<h2 id="嵌套时间线"><a href="#嵌套时间线" class="headerlink" title="嵌套时间线"></a>嵌套时间线</h2><p>你可以在时间线中嵌套另一个时间线，这样可以模块化你的代码，使其更易于维护。例如：</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> master = gsap.<span class="title function_">timeline</span>();</span><br><span class="line">master.<span class="title function_">add</span>(<span class="title function_">intro</span>()).<span class="title function_">add</span>(<span class="title function_">middle</span>(), <span class="string">&quot;+=2&quot;</span>).<span class="title function_">add</span>(<span class="title function_">conclusion</span>(), <span class="string">&quot;-=1&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="其他时间线特性"><a href="#其他时间线特性" class="headerlink" title="其他时间线特性"></a>其他时间线特性</h2><ul>
-<li>**<code>timeScale()</code>**：可以加速或减慢整个时间线的播放速度。</li>
-<li>**<code>progress()</code> 或 <code>totalProgress()</code>**：获取时间线的进度，<code>totalProgress()</code> 包括任何重复。</li>
-<li>**<code>killTweensOf()</code>**：杀死特定对象内的时间线动画。</li>
-<li>**<code>getTweensOf()</code>**：获取特定对象的动画。</li>
-<li>**<code>getChildren()</code>**：获取时间线中的所有动画和时间线。</li>
-<li><strong><code>currentLabel()</code></strong> 或 <strong><code>nextLabel()</code></strong> 和 **<code>previousLabel()</code>**：获取或查找时间线中特定位置的标签。</li>
-</ul>
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> tl = gsap.<span class="title function_">timeline</span>(&#123;</span><br><span class="line">  <span class="attr">repeat</span>: <span class="number">3</span>,</span><br><span class="line">  <span class="attr">repeatDelay</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">onComplete</span>: myFunction</span><br><span class="line">&#125;);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">1</span>, <span class="attr">x</span>: <span class="number">200</span>, <span class="attr">y</span>: <span class="number">100</span> &#125;);</span><br><span class="line">tl.<span class="title function_">addLabel</span>(<span class="string">&quot;spin&quot;</span>, <span class="number">3</span>);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">2</span>, <span class="attr">rotation</span>: <span class="string">&quot;+=360&quot;</span> &#125;, <span class="string">&quot;spin&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>通过这些属性和方法，你可以创建复杂的动画序列，精确控制动画的播放、重复和回调。GSAP的时间线功能非常强大，能够满足大多数复杂的动画需求。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>GSAP</category>
-      </categories>
-      <tags>
-        <tag>GSAP</tag>
-        <tag>动画库</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>GSAP基础入门</title>
     <url>/2024/11/04/GSAP%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/</url>
     <content><![CDATA[<h2 id="补间动画："><a href="#补间动画：" class="headerlink" title="补间动画："></a><strong>补间动画：</strong></h2><p>这里有四种类型的动画补间：</p>
@@ -234,20 +124,113 @@
       </tags>
   </entry>
   <entry>
-    <title>react项目配置---全局axios及错误处理</title>
-    <url>/2024/10/30/react%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80axios%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="全局axios及错误处理（react）"><a href="#全局axios及错误处理（react）" class="headerlink" title="全局axios及错误处理（react）"></a>全局axios及错误处理（react）</h1><p>以下是对项目进行全局axios配置及错误处理，以react为例</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">//src/utils/axios.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&quot;axios&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> handleErrors <span class="keyword">from</span> <span class="string">&quot;./handleError&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个axios实例</span></span><br><span class="line"><span class="keyword">const</span> service = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">  <span class="attr">baseURL</span>: process.<span class="property">env</span>.<span class="property">REACT_APP_API_URL</span>,</span><br><span class="line">  <span class="attr">timeout</span>: <span class="number">5000</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">responseType</span>: <span class="string">&quot;json&quot;</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求拦截器</span></span><br><span class="line">service.<span class="property">interceptors</span>.<span class="property">request</span>.<span class="title function_">use</span>(</span><br><span class="line">  <span class="function">(<span class="params">config</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//在请求前做些什么</span></span><br><span class="line">    <span class="keyword">const</span> token = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&quot;token&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (token) &#123;</span><br><span class="line">      config.<span class="property">headers</span>[<span class="string">&quot;Authorization&quot;</span>] = <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> config;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对请求错误做些什么</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//响应拦截器</span></span><br><span class="line">service.<span class="property">interceptors</span>.<span class="property">response</span>.<span class="title function_">use</span>(</span><br><span class="line">  <span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对响应数据做些什么</span></span><br><span class="line">    <span class="keyword">return</span> response.<span class="property">data</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对响应错误做些什么</span></span><br><span class="line">    <span class="title function_">handleErrors</span>(error); <span class="comment">// 使用普通函数处理错误</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> service;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    <title>Hello World</title>
+    <url>/2024/10/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/utils/handleError.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; message &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleErrors</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error.<span class="property">response</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; status &#125; = error.<span class="property">response</span>;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">200</span> &amp;&amp; status &lt; <span class="number">300</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">500</span> &amp;&amp; status &lt; <span class="number">600</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`服务器错误: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">403</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;禁止访问: 403 Forbidden&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">404</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;未找到: 404 Not Found&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`错误状态码: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (error.<span class="property">request</span>) &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求发出, 网络错误&quot;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求错误: &quot;</span> + error.<span class="property">message</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> handleErrors;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>GSAP时间线Timeline</title>
+    <url>/2024/11/04/GSAP%E6%97%B6%E9%97%B4%E7%BA%BFTimeline/</url>
+    <content><![CDATA[<h1 id="时间轴"><a href="#时间轴" class="headerlink" title="时间轴"></a>时间轴</h1><p><a href="https://gsap.com/docs/v3/GSAP/Timeline"><strong>时间轴</strong></a>是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**<code>delay</code>** 。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// WITHOUT Timelines (only using tweens with delays):</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; x: 100, duration: 1 &#125;);</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; y: 50, duration: 1, delay: 1 &#125;);//wait 1 second</span><br><span class="line">gsap.to(&quot;#id&quot;, &#123; opacity: 0, duration: 1, delay: 2 &#125;);//wait 2 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果您想让第一个动画更长怎么办？此后您需要调整<em>每次</em>延迟。如果您想**<code>pause()</code><strong>整个序列或</strong><code>restart()</code><strong>它或</strong><code>reverse()</code>**它即时或重复两次怎么办？这可能会变得相当混乱，但 GSAP 的时间表使其变得异常简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//WITH Timelines (cleaner, more versatile)</span><br><span class="line">var tl = gsap.timeline(&#123;repeat: 2, repeatDelay: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;x: 100, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;y: 50, duration: 1&#125;);</span><br><span class="line">tl.to(&quot;#id&quot;, &#123;opacity: 0, duration: 1&#125;);</span><br><span class="line"></span><br><span class="line">// then we can control the whole thing easily...</span><br><span class="line">tl.pause();</span><br><span class="line">tl.resume();</span><br><span class="line">tl.seek(1.5);</span><br><span class="line">tl.reverse();</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>现在我们可以调整时间，而不必担心延迟的影响！增加第一个补间的持续时间，一切都会自动调整。</p>
+<h1 id="在时间轴中定位动画"><a href="#在时间轴中定位动画" class="headerlink" title="在时间轴中定位动画"></a>在<a href="https://gsap.com/docs/v3/GSAP/Timeline#positioning-animations-in-a-timeline"><strong>时间轴</strong></a>中定位动画</h1><p>默认情况下，动画会添加到时间线的<strong>末尾</strong>，以便它们按顺序排列，但您可以使用<a href="https://gsap.com/resources/position-parameter"><strong>位置参数</strong></a>来精确控制事物的放置位置。它通常位于<strong>vars</strong>参数之后，并使用带有以下选项的灵活语法：</p>
+<ul>
+<li>从时间线开始测量的<strong>绝对时间</strong>（以秒为单位），作为<strong>数字，</strong>如**<code>3</code>**</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert exactly 3 seconds from the start of the timeline</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, 3);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>标签</strong>，例如**<code>&quot;someLabel&quot;</code>** 。<em>如果标签不存在，它将被添加到时间线的末尾。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the &quot;someLabel&quot; label</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;someLabel&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>&quot;&lt;&quot;</code><strong>上一个动画的</strong>开始</strong><em>。</em>将**<code>&lt;</code>*<em>视为返回上一个动画开头的指针。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the START of the  previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&lt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>&quot;&gt;&quot;</code></strong> - 上一个动画的<strong>结束</strong><em>。</em>将**<code>&gt;</code>*<em>视为指向上一个动画结尾的指针。</em></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// insert at the END of the previous animation</span><br><span class="line">tl.to(&quot;.class&quot;, &#123; x: 100 &#125;, &quot;&gt;&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>复杂字符串，其中**<code>&quot;+=&quot;</code><strong>和</strong><code>&quot;-=&quot;</code><strong>前缀表示</strong>相对<strong>值。*当</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>后面有数字时，它被解释为相对数字，因此</strong><code>&quot;&lt;2&quot;</code><strong>与</strong><code>&quot;&lt;+=2&quot;</code>*<em>相同。</em>示例：<ul>
+<li><strong><code>&quot;+=1&quot;</code></strong> - 时间线结束后 1 秒（创建间隙）</li>
+<li><strong><code>&quot;-=1&quot;</code></strong> - 时间线结束前 1 秒（重叠）</li>
+<li><strong><code>&quot;myLabel+=2&quot;</code></strong> - 标签**<code>&quot;myLabel&quot;</code>**过去 2 秒</li>
+<li><strong><code>&quot;&lt;+=3&quot;</code></strong> - 上一个动画开始后 3 秒</li>
+<li><strong><code>&quot;&lt;3&quot;</code></strong> - 与**<code>&quot;&lt;+=3&quot;</code>**相同（见上文）（ **<code>&quot;+=&quot;</code><strong>在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code>**后面时隐含）</li>
+<li><strong><code>&quot;&gt;-0.5&quot;</code></strong> - 上一个动画结束前 0.5 秒。就像说<em>“上一个动画的结尾加-0.5”</em></li>
+</ul>
+</li>
+<li>基于<strong>百分比</strong>的复杂字符串。当紧跟在**<code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>前缀之后时，百分比基于所</strong>插入动画<strong>的<a href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。当紧跟在</strong><code>&quot;&lt;&quot;</code><strong>或</strong><code>&quot;&gt;&quot;</code><strong>之后时，它基于上</strong>一个动画*<em>的<a href="https://gsap.com/docs/v3/GSAP/Tween/totalDuration()"><strong>总持续时间</strong></a>。</em>注意：总持续时间包括重复&#x2F;溜溜*。示例：<ul>
+<li><strong><code>&quot;-=25%&quot;</code></strong> - 与时间线末尾重叠插入动画总持续时间的 25%</li>
+<li><strong><code>&quot;+=50%&quot;</code></strong> - 超出时间线末尾插入动画总持续时间的 50%，从而创建间隙</li>
+<li><strong><code>&quot;&lt;25%&quot;</code></strong> - 进入上一个动画的 25%（从开始处算起）。与**<code>&quot;&gt;-75%&quot;</code><strong>相同，与上一个动画</strong>结束**时相比负 75%。</li>
+<li><strong><code>&quot;&lt;+=25%&quot;</code></strong> - 上一个动画开始之后插入动画总持续时间的 25%。与**<code>&quot;&lt;25%&quot;</code><strong>不同，“&lt;25%”的百分比基于</strong>前一个动画的<strong>总持续时间，而紧随</strong><code>&quot;+=&quot;</code><strong>或</strong><code>&quot;-=&quot;</code><strong>之后的任何内容都基于</strong>插入动画的**总持续时间。</li>
+<li><strong><code>&quot;myLabel+=30%&quot;</code></strong> - 插入动画总持续时间超过标签**<code>&quot;myLabel&quot;</code>**的 30%。</li>
+</ul>
+</li>
+</ul>
+<h1 id="特殊属性"><a href="#特殊属性" class="headerlink" title="特殊属性"></a>特殊属性</h1><p>以下是一些GSAP时间线的常用特殊属性：</p>
+<ul>
+<li>**<code>repeat</code>**：动画重复的次数。如果设置为 <code>1</code>，则动画会无限重复。</li>
+<li>**<code>repeatDelay</code>**：两次重复之间的间隔时间（以秒为单位）。</li>
+<li>**<code>yoyo</code>**：如果为 <code>true</code>，则每次重复播放都会前后交替进行，使得动画来回运动，类似于溜溜球。</li>
+<li>**<code>delay</code>**：时间轴开始之前的延迟（以秒为单位）。</li>
+<li>**<code>onComplete</code>**：时间线播放完毕后调用的函数。</li>
+<li>**<code>defaults</code>**：可以设置默认值，这样在时间线中创建的每个动画都会继承这些默认值，如 <code>duration</code> 和 <code>ease</code>。</li>
+<li>**<code>onRepeat</code>**：在每次重复时调用的函数。</li>
+<li>**<code>onReverseComplete</code>**：当时间线反向播放完成时调用的函数。</li>
+</ul>
+<h2 id="Getter-Setter-方法"><a href="#Getter-Setter-方法" class="headerlink" title="Getter &#x2F; Setter 方法"></a>Getter &#x2F; Setter 方法</h2><p>时间线提供了一些方法来获取或设置时间线的状态：</p>
+<ul>
+<li>**<code>time()</code>**：播放头的本地位置（当前时间，以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
+<li>**<code>progress()</code>**：介于0和1之间的值，指示播放头的位置，其中0处在开始位置，0.5处在中途完成，1处在结束位置。</li>
+<li>**<code>duration()</code>**：动画的持续时间（以秒为单位），不包括任何重复或 <code>repeatDelays</code>。</li>
+<li>**<code>delay()</code>**：动画的初始延迟（动画开始之前的时间长度，以秒为单位）。</li>
+</ul>
+<h2 id="嵌套时间线"><a href="#嵌套时间线" class="headerlink" title="嵌套时间线"></a>嵌套时间线</h2><p>你可以在时间线中嵌套另一个时间线，这样可以模块化你的代码，使其更易于维护。例如：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> master = gsap.<span class="title function_">timeline</span>();</span><br><span class="line">master.<span class="title function_">add</span>(<span class="title function_">intro</span>()).<span class="title function_">add</span>(<span class="title function_">middle</span>(), <span class="string">&quot;+=2&quot;</span>).<span class="title function_">add</span>(<span class="title function_">conclusion</span>(), <span class="string">&quot;-=1&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他时间线特性"><a href="#其他时间线特性" class="headerlink" title="其他时间线特性"></a>其他时间线特性</h2><ul>
+<li>**<code>timeScale()</code>**：可以加速或减慢整个时间线的播放速度。</li>
+<li>**<code>progress()</code> 或 <code>totalProgress()</code>**：获取时间线的进度，<code>totalProgress()</code> 包括任何重复。</li>
+<li>**<code>killTweensOf()</code>**：杀死特定对象内的时间线动画。</li>
+<li>**<code>getTweensOf()</code>**：获取特定对象的动画。</li>
+<li>**<code>getChildren()</code>**：获取时间线中的所有动画和时间线。</li>
+<li><strong><code>currentLabel()</code></strong> 或 <strong><code>nextLabel()</code></strong> 和 **<code>previousLabel()</code>**：获取或查找时间线中特定位置的标签。</li>
+</ul>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> tl = gsap.<span class="title function_">timeline</span>(&#123;</span><br><span class="line">  <span class="attr">repeat</span>: <span class="number">3</span>,</span><br><span class="line">  <span class="attr">repeatDelay</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">onComplete</span>: myFunction</span><br><span class="line">&#125;);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">1</span>, <span class="attr">x</span>: <span class="number">200</span>, <span class="attr">y</span>: <span class="number">100</span> &#125;);</span><br><span class="line">tl.<span class="title function_">addLabel</span>(<span class="string">&quot;spin&quot;</span>, <span class="number">3</span>);</span><br><span class="line">tl.<span class="title function_">to</span>(<span class="string">&quot;.class&quot;</span>, &#123; <span class="attr">duration</span>: <span class="number">2</span>, <span class="attr">rotation</span>: <span class="string">&quot;+=360&quot;</span> &#125;, <span class="string">&quot;spin&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>通过这些属性和方法，你可以创建复杂的动画序列，精确控制动画的播放、重复和回调。GSAP的时间线功能非常强大，能够满足大多数复杂的动画需求。</p>
+]]></content>
       <categories>
         <category>前端</category>
-        <category>react</category>
-        <category>项目配置</category>
+        <category>GSAP</category>
       </categories>
       <tags>
-        <tag>react</tag>
-        <tag>配置</tag>
+        <tag>GSAP</tag>
+        <tag>动画库</tag>
       </tags>
   </entry>
   <entry>
@@ -429,6 +412,106 @@
       </tags>
   </entry>
   <entry>
+    <title>react项目配置---全局axios及错误处理</title>
+    <url>/2024/10/30/react%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80axios%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="全局axios及错误处理（react）"><a href="#全局axios及错误处理（react）" class="headerlink" title="全局axios及错误处理（react）"></a>全局axios及错误处理（react）</h1><p>以下是对项目进行全局axios配置及错误处理，以react为例</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">//src/utils/axios.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&quot;axios&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> handleErrors <span class="keyword">from</span> <span class="string">&quot;./handleError&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个axios实例</span></span><br><span class="line"><span class="keyword">const</span> service = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">  <span class="attr">baseURL</span>: process.<span class="property">env</span>.<span class="property">REACT_APP_API_URL</span>,</span><br><span class="line">  <span class="attr">timeout</span>: <span class="number">5000</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">responseType</span>: <span class="string">&quot;json&quot;</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求拦截器</span></span><br><span class="line">service.<span class="property">interceptors</span>.<span class="property">request</span>.<span class="title function_">use</span>(</span><br><span class="line">  <span class="function">(<span class="params">config</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//在请求前做些什么</span></span><br><span class="line">    <span class="keyword">const</span> token = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&quot;token&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (token) &#123;</span><br><span class="line">      config.<span class="property">headers</span>[<span class="string">&quot;Authorization&quot;</span>] = <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> config;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对请求错误做些什么</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//响应拦截器</span></span><br><span class="line">service.<span class="property">interceptors</span>.<span class="property">response</span>.<span class="title function_">use</span>(</span><br><span class="line">  <span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对响应数据做些什么</span></span><br><span class="line">    <span class="keyword">return</span> response.<span class="property">data</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//对响应错误做些什么</span></span><br><span class="line">    <span class="title function_">handleErrors</span>(error); <span class="comment">// 使用普通函数处理错误</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> service;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/utils/handleError.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; message &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleErrors</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error.<span class="property">response</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; status &#125; = error.<span class="property">response</span>;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">200</span> &amp;&amp; status &lt; <span class="number">300</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">500</span> &amp;&amp; status &lt; <span class="number">600</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`服务器错误: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">403</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;禁止访问: 403 Forbidden&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">404</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;未找到: 404 Not Found&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`错误状态码: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (error.<span class="property">request</span>) &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求发出, 网络错误&quot;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求错误: &quot;</span> + error.<span class="property">message</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> handleErrors;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>前端</category>
+        <category>react</category>
+        <category>项目配置</category>
+      </categories>
+      <tags>
+        <tag>react</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序中bindtap和bindsync区别</title>
+    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%ADbindtap%E5%92%8Cbindsync%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="bindtap和bindsync区别"><a href="#bindtap和bindsync区别" class="headerlink" title="bindtap和bindsync区别"></a><strong>bindtap和bindsync区别</strong></h1><p>在小程序开发中，<code>bindsync</code> 和 <code>bindtap</code> 是两种常用的事件绑定方式，它们的用途和行为略有不同：</p>
+<h3 id="1-bindtap"><a href="#1-bindtap" class="headerlink" title="1. bindtap"></a><strong>1. <code>bindtap</code></strong></h3><p><code>bindtap</code> 是用来监听用户的点击（或触摸）事件，等同于点击事件处理器。它用于捕捉用户的点击操作，并执行相应的回调函数。</p>
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
+<li><code>bindtap</code> 是绑定点击事件的事件处理器。</li>
+<li>点击元素时会触发这个事件，执行相应的逻辑。</li>
+<li>常用于按钮、图片、文字等点击交互场景。</li>
+</ul>
+<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;view bindtap=&quot;handleTap&quot;&gt;点击我&lt;/view&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  handleTap() &#123;</span><br><span class="line">    console.log(&#x27;你点击了这个元素&#x27;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li>当用户点击 <code>&lt;view&gt;</code> 元素时，<code>handleTap</code> 函数将被触发，打印出相应的内容。</li>
+</ul>
+<h3 id="捕获和冒泡："><a href="#捕获和冒泡：" class="headerlink" title="捕获和冒泡："></a><strong>捕获和冒泡：</strong></h3><ul>
+<li><code>bindtap</code> 默认支持事件冒泡，也就是说，子元素的点击事件会向上冒泡到父元素。</li>
+<li>如果不希望事件冒泡，可以使用 <code>catchtap</code>。</li>
+</ul>
+<hr>
+<h3 id="2-bindsync"><a href="#2-bindsync" class="headerlink" title="2. bindsync"></a><strong>2. <code>bindsync</code></strong></h3><p><code>bindsync</code> 是专门用于 <strong>双向绑定</strong> 的属性，通常用于表单组件中，实现数据的实时同步更新。</p>
+<h3 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
+<li><code>bindsync</code> 是用于数据的双向绑定，能够实时同步用户输入和数据模型。</li>
+<li>当用户在表单控件中输入或修改值时，数据会自动同步到绑定的数据源。</li>
+<li>常见于表单组件，如 <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> 等。</li>
+</ul>
+<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;input bindinput=&quot;onInputChange&quot; bindsync=&quot;value&quot; /&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    value: &#x27;&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  onInputChange(e) &#123;</span><br><span class="line">    console.log(&#x27;当前输入框的值为：&#x27;, e.detail.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li>用户在输入框中输入时，<code>value</code> 会与输入框的内容实时同步，且可以通过双向绑定的机制实时获取或更新数据。</li>
+<li><code>bindsync</code> 使得在复杂表单中，数据与视图的绑定更加方便。</li>
+</ul>
+<hr>
+<h3 id="3-区别总结"><a href="#3-区别总结" class="headerlink" title="3. 区别总结"></a><strong>3. 区别总结</strong></h3><ul>
+<li>**<code>bindtap</code>**：是用于 <strong>单向绑定</strong> 点击事件的事件处理器。当用户点击某个元素时，触发回调逻辑。</li>
+<li>**<code>bindsync</code>**：是用于 <strong>双向绑定</strong> 表单数据的绑定方式，可以实时同步数据源和视图的输入内容。</li>
+</ul>
+<h3 id="常见使用场景："><a href="#常见使用场景：" class="headerlink" title="常见使用场景："></a><strong>常见使用场景：</strong></h3><ul>
+<li>**<code>bindtap</code>**：用户点击按钮、图片、文本时触发的操作（如导航、提交等）。</li>
+<li>**<code>bindsync</code>**：表单中使用，保持数据的实时更新，例如输入框内容和页面数据保持同步。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序中pureDataPattern优化设置</title>
+    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%ADpureDataPattern%E4%BC%98%E5%8C%96%E8%AE%BE%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="pureDataPattern优化设置"><a href="#pureDataPattern优化设置" class="headerlink" title="pureDataPattern优化设置"></a><strong><code>pureDataPattern</code>优化设置</strong></h1><h1 id="pureDataPattern"><a href="#pureDataPattern" class="headerlink" title="pureDataPattern"></a><strong><code>pureDataPattern</code></strong></h1><p><code>pureDataPattern</code> 是微信小程序的一项优化设置，旨在提高页面性能，特别是在数据频繁更新时。如果页面的数据变化不涉及与渲染相关的逻辑（例如更新纯粹的业务数据而不是视图），可以通过配置 <code>pureDataPattern</code> 来告知小程序引擎哪些数据不需要参与视图层的 diff（对比计算）。</p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a><strong>作用</strong></h3><p>通过 <code>pureDataPattern</code>，开发者可以声明某些数据字段为“纯数据”，这些字段的更新不会触发视图层的渲染过程，避免了不必要的性能开销。它主要用于减少数据变化导致的性能损耗，从而优化页面性能。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a><strong>使用场景</strong></h3><p>当某些数据是纯业务逻辑数据，更新时不影响页面视图渲染时，可以使用 <code>pureDataPattern</code>。例如，统计数据、缓存数据、后台任务中的状态等。</p>
+<h3 id="如何配置"><a href="#如何配置" class="headerlink" title="如何配置"></a><strong>如何配置</strong></h3><p><code>pureDataPattern</code> 是通过在小程序的 <code>app.json</code>、<code>page.json</code> 或者 <code>component.json</code> 文件中配置的，通常针对页面或组件。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h3><p>以下是一个简单的 <code>page.json</code> 配置示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">json复制代码&#123;</span><br><span class="line">  &quot;usingComponents&quot;: &#123;&#125;,</span><br><span class="line">  &quot;pureDataPattern&quot;: &quot;^_&quot;  // 表示以 _ 开头的数据字段为纯数据</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在此配置中，<code>pureDataPattern</code> 表示所有以 <code>_</code> 开头的数据字段会被认为是纯数据，不会影响视图渲染。</p>
+<h3 id="规则说明"><a href="#规则说明" class="headerlink" title="规则说明"></a><strong>规则说明</strong></h3><ul>
+<li><code>pureDataPattern</code> 是一个正则表达式，用于匹配那些不参与视图渲染的数据字段。</li>
+<li>当符合正则表达式的字段发生变化时，视图层将忽略这些字段的更新，从而避免视图层不必要的性能开销。</li>
+</ul>
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a><strong>配置示例</strong></h3><p>如果我们在一个小程序页面的 <code>data</code> 中声明了以下数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    _somePrivateData: 123,  // 不需要视图更新的数据</span><br><span class="line">    visibleData: &#x27;This is visible&#x27;  // 会影响视图的数据</span><br><span class="line">  &#125;,</span><br><span class="line">  // 数据更新时，只有 visibleData 会触发视图更新</span><br><span class="line">  updateData() &#123;</span><br><span class="line">    this.setData(&#123;</span><br><span class="line">      _somePrivateData: Math.random(),</span><br><span class="line">      visibleData: &#x27;Updated visible data&#x27;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>通过配置 <code>pureDataPattern</code>，像 <code>_somePrivateData</code> 这样以 <code>_</code> 开头的数据更新时不会引起视图的重新渲染，而 <code>visibleData</code> 的更新会触发视图更新。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a><strong>注意事项</strong></h3><ul>
+<li>纯数据字段的更新不会影响视图的重渲染，但如果需要该数据在视图中显示，必须确保它不符合 <code>pureDataPattern</code> 的规则。</li>
+<li>使用 <code>pureDataPattern</code> 仅适用于特定场景，过度使用可能导致预期之外的行为，因为视图层无法感知到这些数据的变化。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><code>pureDataPattern</code> 是微信小程序的一项性能优化机制，用于声明不影响视图渲染的纯数据字段。合理使用可以减少不必要的视图更新，从而提升性能，尤其在处理频繁的数据变化时非常有用。</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>小程序中的behaviors</title>
     <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84behaviors/</url>
     <content><![CDATA[<h1 id="behaviors"><a href="#behaviors" class="headerlink" title="behaviors"></a><strong>behaviors</strong></h1><p>在微信小程序开发中，<code>behaviors</code> 是一种类似于 <strong>“组件继承”</strong> 的机制，允许将公共的代码（如数据、方法、生命周期函数等）抽离到一个单独的模块，然后让多个组件或页面去复用这些代码。<code>behaviors</code> 类似于 React 中的 **<code>mixins</code>**，用于代码的复用和模块化。</p>
@@ -480,6 +563,149 @@
 <p>这样，<code>componentA</code> 和 <code>componentB</code> 都拥有了计数功能，而无需重复代码。</p>
 <hr>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><code>behaviors</code> 是微信小程序中提供的一种复用代码的方式，可以将数据、方法、生命周期等共享逻辑抽离出来，实现组件之间的逻辑复用。通过 <code>behaviors</code>，可以让组件的开发更加模块化、简洁化，提高代码的复用性和维护性。</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序的三大API</title>
+    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%89%E5%A4%A7API/</url>
+    <content><![CDATA[<h1 id="小程序3大API"><a href="#小程序3大API" class="headerlink" title="小程序3大API"></a>小程序3大API</h1><p>微信小程序提供了三大类 API，涵盖了各种功能，帮助开发者实现业务需求。具体如下：</p>
+<h3 id="1-界面-API（UI-APIs）"><a href="#1-界面-API（UI-APIs）" class="headerlink" title="1. 界面 API（UI APIs）"></a>1. <strong>界面 API（UI APIs）</strong></h3><p>这些 API 主要用于控制小程序的界面行为和视觉效果，如导航、交互反馈、菜单控制等。</p>
+<p><strong>常用的界面 API 包括：</strong></p>
+<ul>
+<li><strong>导航栏相关</strong><ul>
+<li><code>wx.setNavigationBarTitle</code>：设置当前页面的标题。</li>
+<li><code>wx.setNavigationBarColor</code>：设置导航栏颜色。</li>
+</ul>
+</li>
+<li><strong>界面交互</strong><ul>
+<li><code>wx.showToast</code>：显示提示框，短暂提示用户某个操作成功或失败。</li>
+<li><code>wx.showLoading</code>：显示加载中的提示框，常用于异步请求时提示用户等待。</li>
+<li><code>wx.hideLoading</code>：隐藏 <code>wx.showLoading</code> 触发的加载框。</li>
+<li><code>wx.showModal</code>：显示模态弹窗，提示用户确认或取消某个操作。</li>
+<li><code>wx.showActionSheet</code>：显示操作菜单，允许用户从多个选项中选择。</li>
+</ul>
+</li>
+<li><strong>导航控制</strong><ul>
+<li><code>wx.navigateTo</code>：跳转到新页面，保留当前页面。</li>
+<li><code>wx.redirectTo</code>：跳转到新页面，关闭当前页面。</li>
+<li><code>wx.switchTab</code>：跳转到指定的 Tab 页面。</li>
+<li><code>wx.navigateBack</code>：返回上一个页面，支持返回多级页面。</li>
+<li><code>wx.reLaunch</code>：关闭所有页面并打开到指定页面。</li>
+</ul>
+</li>
+<li><strong>下拉刷新</strong><ul>
+<li><code>wx.startPullDownRefresh</code>：主动触发页面下拉刷新效果。</li>
+<li><code>wx.stopPullDownRefresh</code>：停止当前页面的下拉刷新效果。</li>
+</ul>
+</li>
+<li><strong>背景及菜单</strong><ul>
+<li><code>wx.setBackgroundColor</code>：设置页面的背景颜色。</li>
+<li><code>wx.setBackgroundTextStyle</code>：设置下拉刷新背景文字样式。</li>
+<li><code>wx.showShareMenu</code>：显示分享按钮。</li>
+<li><code>wx.hideShareMenu</code>：隐藏分享按钮。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">showToast</span>(&#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;操作成功&#x27;</span>,</span><br><span class="line">  <span class="attr">icon</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">2000</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据-API（Data-APIs）"><a href="#2-数据-API（Data-APIs）" class="headerlink" title="2. 数据 API（Data APIs）"></a>2. <strong>数据 API（Data APIs）</strong></h3><p>数据 API 涵盖了获取和存储数据的功能，主要用于与后端服务器通信、缓存数据、本地存储等。</p>
+<p><strong>常用的数据 API 包括：</strong></p>
+<ul>
+<li><strong>网络请求</strong><ul>
+<li><code>wx.request</code>：发送 HTTP 请求，支持 GET、POST 等方法。</li>
+<li><code>wx.uploadFile</code>：将本地文件上传到服务器。</li>
+<li><code>wx.downloadFile</code>：从服务器下载文件。</li>
+</ul>
+</li>
+<li><strong>WebSocket</strong><ul>
+<li><code>wx.connectSocket</code>：创建 WebSocket 连接，用于实时通讯。</li>
+<li><code>wx.onSocketOpen</code>：监听 WebSocket 连接打开事件。</li>
+<li><code>wx.sendSocketMessage</code>：通过 WebSocket 发送消息。</li>
+<li><code>wx.closeSocket</code>：关闭 WebSocket 连接。</li>
+</ul>
+</li>
+<li><strong>文件系统</strong><ul>
+<li><code>wx.getFileSystemManager</code>：获取文件系统管理器，用于管理文件读写操作。</li>
+<li><code>wx.saveFile</code>：将文件保存到本地。</li>
+<li><code>wx.getSavedFileList</code>：获取本地已保存的文件列表。</li>
+</ul>
+</li>
+<li><strong>本地存储</strong><ul>
+<li><code>wx.setStorageSync</code>：同步设置本地存储的数据。</li>
+<li><code>wx.getStorageSync</code>：同步获取本地存储的数据。</li>
+<li><code>wx.clearStorageSync</code>：清空本地存储的所有数据。</li>
+</ul>
+</li>
+<li><strong>数据库</strong><ul>
+<li>小程序还支持云开发，利用云数据库进行数据存储和查询。</li>
+<li><code>wx.cloud.database</code>：获取云数据库的引用。</li>
+<li><code>db.collection()</code>：获取云数据库中的集合。</li>
+<li><code>collection.add()</code>：向集合中添加数据。</li>
+<li><code>collection.get()</code>：从集合中查询数据。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">request</span>(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;https://api.example.com/data&#x27;</span>,</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">data</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">fail</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-设备-API（Device-APIs）"><a href="#3-设备-API（Device-APIs）" class="headerlink" title="3. 设备 API（Device APIs）"></a>3. <strong>设备 API（Device APIs）</strong></h3><p>设备 API 提供了与用户设备交互的功能，如系统信息、网络状态、蓝牙、Wi-Fi 等操作。</p>
+<p><strong>常用的设备 API 包括：</strong></p>
+<ul>
+<li><strong>系统信息</strong><ul>
+<li><code>wx.getSystemInfo</code>：获取设备系统信息，如屏幕尺寸、操作系统、微信版本等。</li>
+<li><code>wx.getSystemInfoSync</code>：同步获取系统信息。</li>
+</ul>
+</li>
+<li><strong>网络状态</strong><ul>
+<li><code>wx.getNetworkType</code>：获取设备的网络类型（如 Wi-Fi、2G、3G、4G）。</li>
+<li><code>wx.onNetworkStatusChange</code>：监听网络状态变化事件。</li>
+</ul>
+</li>
+<li><strong>位置</strong><ul>
+<li><code>wx.getLocation</code>：获取用户的当前位置，经纬度、速度等信息。</li>
+<li><code>wx.chooseLocation</code>：打开地图选择位置。</li>
+<li><code>wx.openLocation</code>：使用内置地图打开指定的地理位置。</li>
+</ul>
+</li>
+<li><strong>蓝牙</strong><ul>
+<li><code>wx.openBluetoothAdapter</code>：初始化蓝牙模块。</li>
+<li><code>wx.startBluetoothDevicesDiscovery</code>：开始搜索附近的蓝牙设备。</li>
+<li><code>wx.connectBLEDevice</code>：连接低功耗蓝牙设备。</li>
+</ul>
+</li>
+<li><strong>Wi-Fi</strong><ul>
+<li><code>wx.startWifi</code>：初始化 Wi-Fi 模块。</li>
+<li><code>wx.getConnectedWifi</code>：获取当前连接的 Wi-Fi 信息。</li>
+</ul>
+</li>
+<li><strong>电量</strong><ul>
+<li><code>wx.getBatteryInfo</code>：获取设备电量信息。</li>
+<li><code>wx.onBatteryInfoChange</code>：监听电量变化。</li>
+</ul>
+</li>
+<li><strong>震动</strong><ul>
+<li><code>wx.vibrateLong</code>：使手机发生长震动。</li>
+<li><code>wx.vibrateShort</code>：使手机发生短震动。</li>
+</ul>
+</li>
+<li><strong>扫码</strong><ul>
+<li><code>wx.scanCode</code>：调用相机扫码功能，支持二维码和条形码。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">getSystemInfo</span>(&#123;</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">model</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">pixelRatio</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowWidth</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowHeight</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>微信小程序的三大类 API 提供了从界面控制、数据交互到设备访问的广泛功能支持。通过灵活运用这些 API，开发者可以实现小程序的各种功能，如页面导航、网络请求、系统状态获取等，构建功能强大且体验流畅的小程序应用。</p>
 ]]></content>
       <categories>
         <category>前端</category>
@@ -661,6 +887,21 @@
       </tags>
   </entry>
   <entry>
+    <title>小程序项目配置---全局websocket</title>
+    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80websocket/</url>
+    <content><![CDATA[<h1 id="全局websocket（微信小程序）"><a href="#全局websocket（微信小程序）" class="headerlink" title="全局websocket（微信小程序）"></a>全局websocket（微信小程序）</h1><p>以下是对小程序项目进行全局websocket配置</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">//websocket.js</span></span><br><span class="line"><span class="keyword">let</span> socket = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> listeners = [];</span><br><span class="line"><span class="keyword">let</span> heartbeatInterval = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">HEARTBEAT_INTERVAL</span> = <span class="number">10000</span>; <span class="comment">// 10秒心跳间隔</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">WEB_SOCKET_URL</span> = <span class="string">&#x27;ws://117.72.95.156:8080/ws&#x27;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">connectWebSocket</span>(<span class="params">url</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span>(socket&amp;&amp; socket.<span class="property">readyState</span> === <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket已连接,无需重连&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> connectUrl=<span class="string">`<span class="subst">$&#123;WEB_SOCKET_URL&#125;</span>/<span class="subst">$&#123;url&#125;</span>`</span></span><br><span class="line">  socket = wx.<span class="title function_">connectSocket</span>(&#123;</span><br><span class="line">    <span class="attr">url</span>: connectUrl <span class="comment">// 确保这里是 url: connectUrl</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">if</span>(socket)&#123;</span><br><span class="line">    socket.<span class="title function_">onOpen</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已打开&#x27;</span>);</span><br><span class="line">      <span class="title function_">startHeartbeat</span>(); <span class="comment">// 连接成功后启动心跳</span></span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onMessage</span>(<span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// console.log(&#x27;收到原始消息:&#x27;, message);</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 确保消息是字符串格式</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> message.<span class="property">data</span> === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> parsedData = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(message.<span class="property">data</span>);</span><br><span class="line">          <span class="keyword">if</span>(parsedData.<span class="property">event</span>===<span class="string">&#x27;heartbeat&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">// console.log(&quot;收到心跳消息&quot;);</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 处理解析后的数据</span></span><br><span class="line">          listeners.<span class="title function_">forEach</span>(<span class="function"><span class="params">listener</span> =&gt;</span> <span class="title function_">listener</span>(parsedData));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;接收到的消息不是字符串格式&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 重置心跳</span></span><br><span class="line">        <span class="title function_">resetHeartbeat</span>();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="comment">// console.error(&#x27;JSON parsing error:&#x27;, error);</span></span><br><span class="line">        <span class="comment">// 处理解析错误</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onError</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;WebSocket错误:&#x27;</span>, error);</span><br><span class="line">      <span class="comment">// 可能需要通知用户连接错误</span></span><br><span class="line">      wx.<span class="title function_">showToast</span>(&#123;</span><br><span class="line">        <span class="attr">title</span>: <span class="string">&#x27;WebSocket连接失败&#x27;</span>,</span><br><span class="line">        <span class="attr">icon</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">        <span class="attr">duration</span>: <span class="number">2000</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onClose</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已关闭&#x27;</span>);</span><br><span class="line">      <span class="title function_">stopHeartbeat</span>(); <span class="comment">// 关闭时停止心跳</span></span><br><span class="line">      <span class="comment">// 可能需要重新连接或通知用户</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">disconnectWebSocket</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (socket) &#123;</span><br><span class="line">    socket.<span class="title function_">close</span>();</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已断开&#x27;</span>);</span><br><span class="line">    <span class="title function_">stopHeartbeat</span>(); <span class="comment">// 停止心跳</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sendMessage</span>(<span class="params">msg</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (socket &amp;&amp; socket.<span class="property">readyState</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    socket.<span class="title function_">send</span>(&#123; <span class="attr">data</span>: msg &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;WebSocket未连接&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">registerMessageListener</span>(<span class="params">listener</span>) &#123;</span><br><span class="line">  listeners.<span class="title function_">push</span>(listener);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">unregisterMessageListener</span>(<span class="params">listener</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> index = listeners.<span class="title function_">indexOf</span>(listener);</span><br><span class="line">  <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">    listeners.<span class="title function_">splice</span>(index, <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">startHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  heartbeatInterval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">sendMessage</span>(<span class="string">&#x27;ping&#x27;</span>); <span class="comment">// 发送心跳消息</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;发送心跳: ping&#x27;</span>);</span><br><span class="line">  &#125;, <span class="variable constant_">HEARTBEAT_INTERVAL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">resetHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (heartbeatInterval) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(heartbeatInterval); <span class="comment">// 清除当前心跳定时器</span></span><br><span class="line">    <span class="title function_">startHeartbeat</span>(); <span class="comment">// 重新启动心跳</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">stopHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (heartbeatInterval) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(heartbeatInterval); <span class="comment">// 停止心跳</span></span><br><span class="line">    heartbeatInterval = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; connectWebSocket, sendMessage, registerMessageListener,unregisterMessageListener, disconnectWebSocket &#125;;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+        <category>项目配置</category>
+      </categories>
+      <tags>
+        <tag>配置</tag>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>小程序页面切换的本质</title>
     <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B5%E9%9D%A2%E5%88%87%E6%8D%A2%E7%9A%84%E6%9C%AC%E8%B4%A8/</url>
     <content><![CDATA[<h1 id="小程序页面切换本质"><a href="#小程序页面切换本质" class="headerlink" title="小程序页面切换本质"></a><strong>小程序页面切换本质</strong></h1><p>在微信小程序中，页面切换的本质可以归结为 <strong>页面栈的管理</strong> 和 <strong>视图的重新渲染</strong>。微信小程序通过一个栈来管理用户的页面跳转，当用户在不同页面之间切换时，小程序会将每个页面的路由推入或弹出页面栈，从而实现页面切换。具体分为以下几个方面：</p>
@@ -699,246 +940,6 @@
       </tags>
   </entry>
   <entry>
-    <title>小程序的三大API</title>
-    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%89%E5%A4%A7API/</url>
-    <content><![CDATA[<h1 id="小程序3大API"><a href="#小程序3大API" class="headerlink" title="小程序3大API"></a>小程序3大API</h1><p>微信小程序提供了三大类 API，涵盖了各种功能，帮助开发者实现业务需求。具体如下：</p>
-<h3 id="1-界面-API（UI-APIs）"><a href="#1-界面-API（UI-APIs）" class="headerlink" title="1. 界面 API（UI APIs）"></a>1. <strong>界面 API（UI APIs）</strong></h3><p>这些 API 主要用于控制小程序的界面行为和视觉效果，如导航、交互反馈、菜单控制等。</p>
-<p><strong>常用的界面 API 包括：</strong></p>
-<ul>
-<li><strong>导航栏相关</strong><ul>
-<li><code>wx.setNavigationBarTitle</code>：设置当前页面的标题。</li>
-<li><code>wx.setNavigationBarColor</code>：设置导航栏颜色。</li>
-</ul>
-</li>
-<li><strong>界面交互</strong><ul>
-<li><code>wx.showToast</code>：显示提示框，短暂提示用户某个操作成功或失败。</li>
-<li><code>wx.showLoading</code>：显示加载中的提示框，常用于异步请求时提示用户等待。</li>
-<li><code>wx.hideLoading</code>：隐藏 <code>wx.showLoading</code> 触发的加载框。</li>
-<li><code>wx.showModal</code>：显示模态弹窗，提示用户确认或取消某个操作。</li>
-<li><code>wx.showActionSheet</code>：显示操作菜单，允许用户从多个选项中选择。</li>
-</ul>
-</li>
-<li><strong>导航控制</strong><ul>
-<li><code>wx.navigateTo</code>：跳转到新页面，保留当前页面。</li>
-<li><code>wx.redirectTo</code>：跳转到新页面，关闭当前页面。</li>
-<li><code>wx.switchTab</code>：跳转到指定的 Tab 页面。</li>
-<li><code>wx.navigateBack</code>：返回上一个页面，支持返回多级页面。</li>
-<li><code>wx.reLaunch</code>：关闭所有页面并打开到指定页面。</li>
-</ul>
-</li>
-<li><strong>下拉刷新</strong><ul>
-<li><code>wx.startPullDownRefresh</code>：主动触发页面下拉刷新效果。</li>
-<li><code>wx.stopPullDownRefresh</code>：停止当前页面的下拉刷新效果。</li>
-</ul>
-</li>
-<li><strong>背景及菜单</strong><ul>
-<li><code>wx.setBackgroundColor</code>：设置页面的背景颜色。</li>
-<li><code>wx.setBackgroundTextStyle</code>：设置下拉刷新背景文字样式。</li>
-<li><code>wx.showShareMenu</code>：显示分享按钮。</li>
-<li><code>wx.hideShareMenu</code>：隐藏分享按钮。</li>
-</ul>
-</li>
-</ul>
-<p><strong>示例代码：</strong></p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">showToast</span>(&#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;操作成功&#x27;</span>,</span><br><span class="line">  <span class="attr">icon</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">2000</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-数据-API（Data-APIs）"><a href="#2-数据-API（Data-APIs）" class="headerlink" title="2. 数据 API（Data APIs）"></a>2. <strong>数据 API（Data APIs）</strong></h3><p>数据 API 涵盖了获取和存储数据的功能，主要用于与后端服务器通信、缓存数据、本地存储等。</p>
-<p><strong>常用的数据 API 包括：</strong></p>
-<ul>
-<li><strong>网络请求</strong><ul>
-<li><code>wx.request</code>：发送 HTTP 请求，支持 GET、POST 等方法。</li>
-<li><code>wx.uploadFile</code>：将本地文件上传到服务器。</li>
-<li><code>wx.downloadFile</code>：从服务器下载文件。</li>
-</ul>
-</li>
-<li><strong>WebSocket</strong><ul>
-<li><code>wx.connectSocket</code>：创建 WebSocket 连接，用于实时通讯。</li>
-<li><code>wx.onSocketOpen</code>：监听 WebSocket 连接打开事件。</li>
-<li><code>wx.sendSocketMessage</code>：通过 WebSocket 发送消息。</li>
-<li><code>wx.closeSocket</code>：关闭 WebSocket 连接。</li>
-</ul>
-</li>
-<li><strong>文件系统</strong><ul>
-<li><code>wx.getFileSystemManager</code>：获取文件系统管理器，用于管理文件读写操作。</li>
-<li><code>wx.saveFile</code>：将文件保存到本地。</li>
-<li><code>wx.getSavedFileList</code>：获取本地已保存的文件列表。</li>
-</ul>
-</li>
-<li><strong>本地存储</strong><ul>
-<li><code>wx.setStorageSync</code>：同步设置本地存储的数据。</li>
-<li><code>wx.getStorageSync</code>：同步获取本地存储的数据。</li>
-<li><code>wx.clearStorageSync</code>：清空本地存储的所有数据。</li>
-</ul>
-</li>
-<li><strong>数据库</strong><ul>
-<li>小程序还支持云开发，利用云数据库进行数据存储和查询。</li>
-<li><code>wx.cloud.database</code>：获取云数据库的引用。</li>
-<li><code>db.collection()</code>：获取云数据库中的集合。</li>
-<li><code>collection.add()</code>：向集合中添加数据。</li>
-<li><code>collection.get()</code>：从集合中查询数据。</li>
-</ul>
-</li>
-</ul>
-<p><strong>示例代码：</strong></p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">request</span>(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;https://api.example.com/data&#x27;</span>,</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">data</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">fail</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-设备-API（Device-APIs）"><a href="#3-设备-API（Device-APIs）" class="headerlink" title="3. 设备 API（Device APIs）"></a>3. <strong>设备 API（Device APIs）</strong></h3><p>设备 API 提供了与用户设备交互的功能，如系统信息、网络状态、蓝牙、Wi-Fi 等操作。</p>
-<p><strong>常用的设备 API 包括：</strong></p>
-<ul>
-<li><strong>系统信息</strong><ul>
-<li><code>wx.getSystemInfo</code>：获取设备系统信息，如屏幕尺寸、操作系统、微信版本等。</li>
-<li><code>wx.getSystemInfoSync</code>：同步获取系统信息。</li>
-</ul>
-</li>
-<li><strong>网络状态</strong><ul>
-<li><code>wx.getNetworkType</code>：获取设备的网络类型（如 Wi-Fi、2G、3G、4G）。</li>
-<li><code>wx.onNetworkStatusChange</code>：监听网络状态变化事件。</li>
-</ul>
-</li>
-<li><strong>位置</strong><ul>
-<li><code>wx.getLocation</code>：获取用户的当前位置，经纬度、速度等信息。</li>
-<li><code>wx.chooseLocation</code>：打开地图选择位置。</li>
-<li><code>wx.openLocation</code>：使用内置地图打开指定的地理位置。</li>
-</ul>
-</li>
-<li><strong>蓝牙</strong><ul>
-<li><code>wx.openBluetoothAdapter</code>：初始化蓝牙模块。</li>
-<li><code>wx.startBluetoothDevicesDiscovery</code>：开始搜索附近的蓝牙设备。</li>
-<li><code>wx.connectBLEDevice</code>：连接低功耗蓝牙设备。</li>
-</ul>
-</li>
-<li><strong>Wi-Fi</strong><ul>
-<li><code>wx.startWifi</code>：初始化 Wi-Fi 模块。</li>
-<li><code>wx.getConnectedWifi</code>：获取当前连接的 Wi-Fi 信息。</li>
-</ul>
-</li>
-<li><strong>电量</strong><ul>
-<li><code>wx.getBatteryInfo</code>：获取设备电量信息。</li>
-<li><code>wx.onBatteryInfoChange</code>：监听电量变化。</li>
-</ul>
-</li>
-<li><strong>震动</strong><ul>
-<li><code>wx.vibrateLong</code>：使手机发生长震动。</li>
-<li><code>wx.vibrateShort</code>：使手机发生短震动。</li>
-</ul>
-</li>
-<li><strong>扫码</strong><ul>
-<li><code>wx.scanCode</code>：调用相机扫码功能，支持二维码和条形码。</li>
-</ul>
-</li>
-</ul>
-<p><strong>示例代码：</strong></p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">getSystemInfo</span>(&#123;</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">model</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">pixelRatio</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowWidth</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowHeight</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>微信小程序的三大类 API 提供了从界面控制、数据交互到设备访问的广泛功能支持。通过灵活运用这些 API，开发者可以实现小程序的各种功能，如页面导航、网络请求、系统状态获取等，构建功能强大且体验流畅的小程序应用。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>小程序项目配置---全局websocket</title>
-    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80websocket/</url>
-    <content><![CDATA[<h1 id="全局websocket（微信小程序）"><a href="#全局websocket（微信小程序）" class="headerlink" title="全局websocket（微信小程序）"></a>全局websocket（微信小程序）</h1><p>以下是对小程序项目进行全局websocket配置</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">//websocket.js</span></span><br><span class="line"><span class="keyword">let</span> socket = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> listeners = [];</span><br><span class="line"><span class="keyword">let</span> heartbeatInterval = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">HEARTBEAT_INTERVAL</span> = <span class="number">10000</span>; <span class="comment">// 10秒心跳间隔</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">WEB_SOCKET_URL</span> = <span class="string">&#x27;ws://117.72.95.156:8080/ws&#x27;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">connectWebSocket</span>(<span class="params">url</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span>(socket&amp;&amp; socket.<span class="property">readyState</span> === <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket已连接,无需重连&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> connectUrl=<span class="string">`<span class="subst">$&#123;WEB_SOCKET_URL&#125;</span>/<span class="subst">$&#123;url&#125;</span>`</span></span><br><span class="line">  socket = wx.<span class="title function_">connectSocket</span>(&#123;</span><br><span class="line">    <span class="attr">url</span>: connectUrl <span class="comment">// 确保这里是 url: connectUrl</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">if</span>(socket)&#123;</span><br><span class="line">    socket.<span class="title function_">onOpen</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已打开&#x27;</span>);</span><br><span class="line">      <span class="title function_">startHeartbeat</span>(); <span class="comment">// 连接成功后启动心跳</span></span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onMessage</span>(<span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// console.log(&#x27;收到原始消息:&#x27;, message);</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 确保消息是字符串格式</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> message.<span class="property">data</span> === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> parsedData = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(message.<span class="property">data</span>);</span><br><span class="line">          <span class="keyword">if</span>(parsedData.<span class="property">event</span>===<span class="string">&#x27;heartbeat&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">// console.log(&quot;收到心跳消息&quot;);</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 处理解析后的数据</span></span><br><span class="line">          listeners.<span class="title function_">forEach</span>(<span class="function"><span class="params">listener</span> =&gt;</span> <span class="title function_">listener</span>(parsedData));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;接收到的消息不是字符串格式&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 重置心跳</span></span><br><span class="line">        <span class="title function_">resetHeartbeat</span>();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="comment">// console.error(&#x27;JSON parsing error:&#x27;, error);</span></span><br><span class="line">        <span class="comment">// 处理解析错误</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onError</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;WebSocket错误:&#x27;</span>, error);</span><br><span class="line">      <span class="comment">// 可能需要通知用户连接错误</span></span><br><span class="line">      wx.<span class="title function_">showToast</span>(&#123;</span><br><span class="line">        <span class="attr">title</span>: <span class="string">&#x27;WebSocket连接失败&#x27;</span>,</span><br><span class="line">        <span class="attr">icon</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">        <span class="attr">duration</span>: <span class="number">2000</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    socket.<span class="title function_">onClose</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已关闭&#x27;</span>);</span><br><span class="line">      <span class="title function_">stopHeartbeat</span>(); <span class="comment">// 关闭时停止心跳</span></span><br><span class="line">      <span class="comment">// 可能需要重新连接或通知用户</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">disconnectWebSocket</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (socket) &#123;</span><br><span class="line">    socket.<span class="title function_">close</span>();</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;WebSocket连接已断开&#x27;</span>);</span><br><span class="line">    <span class="title function_">stopHeartbeat</span>(); <span class="comment">// 停止心跳</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sendMessage</span>(<span class="params">msg</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (socket &amp;&amp; socket.<span class="property">readyState</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    socket.<span class="title function_">send</span>(&#123; <span class="attr">data</span>: msg &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;WebSocket未连接&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">registerMessageListener</span>(<span class="params">listener</span>) &#123;</span><br><span class="line">  listeners.<span class="title function_">push</span>(listener);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">unregisterMessageListener</span>(<span class="params">listener</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> index = listeners.<span class="title function_">indexOf</span>(listener);</span><br><span class="line">  <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">    listeners.<span class="title function_">splice</span>(index, <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">startHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  heartbeatInterval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">sendMessage</span>(<span class="string">&#x27;ping&#x27;</span>); <span class="comment">// 发送心跳消息</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;发送心跳: ping&#x27;</span>);</span><br><span class="line">  &#125;, <span class="variable constant_">HEARTBEAT_INTERVAL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">resetHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (heartbeatInterval) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(heartbeatInterval); <span class="comment">// 清除当前心跳定时器</span></span><br><span class="line">    <span class="title function_">startHeartbeat</span>(); <span class="comment">// 重新启动心跳</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">stopHeartbeat</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (heartbeatInterval) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(heartbeatInterval); <span class="comment">// 停止心跳</span></span><br><span class="line">    heartbeatInterval = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; connectWebSocket, sendMessage, registerMessageListener,unregisterMessageListener, disconnectWebSocket &#125;;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-        <category>项目配置</category>
-      </categories>
-      <tags>
-        <tag>配置</tag>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>小程序中bindtap和bindsync区别</title>
-    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%ADbindtap%E5%92%8Cbindsync%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="bindtap和bindsync区别"><a href="#bindtap和bindsync区别" class="headerlink" title="bindtap和bindsync区别"></a><strong>bindtap和bindsync区别</strong></h1><p>在小程序开发中，<code>bindsync</code> 和 <code>bindtap</code> 是两种常用的事件绑定方式，它们的用途和行为略有不同：</p>
-<h3 id="1-bindtap"><a href="#1-bindtap" class="headerlink" title="1. bindtap"></a><strong>1. <code>bindtap</code></strong></h3><p><code>bindtap</code> 是用来监听用户的点击（或触摸）事件，等同于点击事件处理器。它用于捕捉用户的点击操作，并执行相应的回调函数。</p>
-<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
-<li><code>bindtap</code> 是绑定点击事件的事件处理器。</li>
-<li>点击元素时会触发这个事件，执行相应的逻辑。</li>
-<li>常用于按钮、图片、文字等点击交互场景。</li>
-</ul>
-<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;view bindtap=&quot;handleTap&quot;&gt;点击我&lt;/view&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  handleTap() &#123;</span><br><span class="line">    console.log(&#x27;你点击了这个元素&#x27;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li>当用户点击 <code>&lt;view&gt;</code> 元素时，<code>handleTap</code> 函数将被触发，打印出相应的内容。</li>
-</ul>
-<h3 id="捕获和冒泡："><a href="#捕获和冒泡：" class="headerlink" title="捕获和冒泡："></a><strong>捕获和冒泡：</strong></h3><ul>
-<li><code>bindtap</code> 默认支持事件冒泡，也就是说，子元素的点击事件会向上冒泡到父元素。</li>
-<li>如果不希望事件冒泡，可以使用 <code>catchtap</code>。</li>
-</ul>
-<hr>
-<h3 id="2-bindsync"><a href="#2-bindsync" class="headerlink" title="2. bindsync"></a><strong>2. <code>bindsync</code></strong></h3><p><code>bindsync</code> 是专门用于 <strong>双向绑定</strong> 的属性，通常用于表单组件中，实现数据的实时同步更新。</p>
-<h3 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
-<li><code>bindsync</code> 是用于数据的双向绑定，能够实时同步用户输入和数据模型。</li>
-<li>当用户在表单控件中输入或修改值时，数据会自动同步到绑定的数据源。</li>
-<li>常见于表单组件，如 <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> 等。</li>
-</ul>
-<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;input bindinput=&quot;onInputChange&quot; bindsync=&quot;value&quot; /&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    value: &#x27;&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  onInputChange(e) &#123;</span><br><span class="line">    console.log(&#x27;当前输入框的值为：&#x27;, e.detail.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li>用户在输入框中输入时，<code>value</code> 会与输入框的内容实时同步，且可以通过双向绑定的机制实时获取或更新数据。</li>
-<li><code>bindsync</code> 使得在复杂表单中，数据与视图的绑定更加方便。</li>
-</ul>
-<hr>
-<h3 id="3-区别总结"><a href="#3-区别总结" class="headerlink" title="3. 区别总结"></a><strong>3. 区别总结</strong></h3><ul>
-<li>**<code>bindtap</code>**：是用于 <strong>单向绑定</strong> 点击事件的事件处理器。当用户点击某个元素时，触发回调逻辑。</li>
-<li>**<code>bindsync</code>**：是用于 <strong>双向绑定</strong> 表单数据的绑定方式，可以实时同步数据源和视图的输入内容。</li>
-</ul>
-<h3 id="常见使用场景："><a href="#常见使用场景：" class="headerlink" title="常见使用场景："></a><strong>常见使用场景：</strong></h3><ul>
-<li>**<code>bindtap</code>**：用户点击按钮、图片、文本时触发的操作（如导航、提交等）。</li>
-<li>**<code>bindsync</code>**：表单中使用，保持数据的实时更新，例如输入框内容和页面数据保持同步。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>微信小程序自定义导航栏</title>
-    <url>/2024/11/07/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%BC%E8%88%AA%E6%A0%8F/</url>
-    <content><![CDATA[<ol>
-<li>现在<code>app.json</code> 文件中把导航栏属性改为自定义</li>
-</ol>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attr">&quot;window&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;navigationStyle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;custom&quot;</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>然后再<code>app.js</code>文件中调用<code>wx.getWindowInfo()</code> 接口，全局获取手机顶部状态栏的高度，如果要把高度大小单位换算成rpx，则还需获取屏幕宽度，运用公式进行换算</li>
-</ol>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="title class_">App</span>(&#123;</span><br><span class="line">  <span class="title function_">onLaunch</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> windowInfo = wx.<span class="title function_">getWindowInfo</span>()</span><br><span class="line">    <span class="keyword">const</span> statusBarHeight=windowInfo.<span class="property">statusBarHeight</span></span><br><span class="line">    <span class="keyword">const</span> screenWidth=windowInfo.<span class="property">screenWidth</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">globalData</span>.<span class="property">navBarHeight</span> = statusBarHeight*<span class="number">750</span>/screenWidth + <span class="number">96</span>;</span><br><span class="line">    <span class="comment">// console.log(statusBarHeight*750/screenWidth + 96);</span></span><br><span class="line">    </span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">globalData</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: <span class="number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>这里设置自定义导航栏高度为96rpx</p>
-<ol>
-<li><p>在对应页面的<code>js</code>文件中获取<code>app.js</code>中的全局导航栏+手机状态栏高度大小</p>
- <figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pages/home/home.js</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">getApp</span>();</span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 页面的初始数据</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: app.<span class="property">globalData</span>.<span class="property">navBarHeight</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在对应页面的<code>wxml</code>文件中引入自定义导航栏</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">t-navbar</span></span></span><br><span class="line"><span class="tag">  <span class="attr">t-class-placeholder</span>=<span class="string">&quot;t-navbar-placeholder&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">t-class-content</span>=<span class="string">&quot;t-navbar-content&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">class</span>=<span class="string">&quot;custom-navbar&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">title</span>=<span class="string">&quot;标题文字&quot;</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br><span class="line">//页面主要内容margin-top值为app.js中获取到的导航栏加手机状态栏的高度</span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;home&quot;</span> <span class="attr">style</span>=<span class="string">&quot;margin-top:&#123;&#123;navBarHeight&#125;&#125;rpx;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span>&gt;</span>pages/home/home.wxml<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
- <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.custom-navbar</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="comment">/* height: 100px !important; */</span></span><br><span class="line">  <span class="attr">--td-navbar-color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attr">--td-navbar-bg-color</span>: <span class="number">#0052d9</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-        <tag>微信</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>小程序项目配置---全局request及错误处理</title>
     <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-%E5%85%A8%E5%B1%80request%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h1 id="全局request及错误处理"><a href="#全局request及错误处理" class="headerlink" title="全局request及错误处理"></a>全局request及错误处理</h1><p>以下是对小程序项目进行全局request及错误处理</p>
@@ -955,36 +956,62 @@
       </tags>
   </entry>
   <entry>
-    <title>小程序中pureDataPattern优化设置</title>
-    <url>/2024/10/30/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%ADpureDataPattern%E4%BC%98%E5%8C%96%E8%AE%BE%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="pureDataPattern优化设置"><a href="#pureDataPattern优化设置" class="headerlink" title="pureDataPattern优化设置"></a><strong><code>pureDataPattern</code>优化设置</strong></h1><h1 id="pureDataPattern"><a href="#pureDataPattern" class="headerlink" title="pureDataPattern"></a><strong><code>pureDataPattern</code></strong></h1><p><code>pureDataPattern</code> 是微信小程序的一项优化设置，旨在提高页面性能，特别是在数据频繁更新时。如果页面的数据变化不涉及与渲染相关的逻辑（例如更新纯粹的业务数据而不是视图），可以通过配置 <code>pureDataPattern</code> 来告知小程序引擎哪些数据不需要参与视图层的 diff（对比计算）。</p>
-<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a><strong>作用</strong></h3><p>通过 <code>pureDataPattern</code>，开发者可以声明某些数据字段为“纯数据”，这些字段的更新不会触发视图层的渲染过程，避免了不必要的性能开销。它主要用于减少数据变化导致的性能损耗，从而优化页面性能。</p>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a><strong>使用场景</strong></h3><p>当某些数据是纯业务逻辑数据，更新时不影响页面视图渲染时，可以使用 <code>pureDataPattern</code>。例如，统计数据、缓存数据、后台任务中的状态等。</p>
-<h3 id="如何配置"><a href="#如何配置" class="headerlink" title="如何配置"></a><strong>如何配置</strong></h3><p><code>pureDataPattern</code> 是通过在小程序的 <code>app.json</code>、<code>page.json</code> 或者 <code>component.json</code> 文件中配置的，通常针对页面或组件。</p>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h3><p>以下是一个简单的 <code>page.json</code> 配置示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">json复制代码&#123;</span><br><span class="line">  &quot;usingComponents&quot;: &#123;&#125;,</span><br><span class="line">  &quot;pureDataPattern&quot;: &quot;^_&quot;  // 表示以 _ 开头的数据字段为纯数据</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>微信小程序自定义导航栏和TabBar（用了Tdesign组件库）</title>
+    <url>/2024/11/07/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%BC%E8%88%AA%E6%A0%8F/</url>
+    <content><![CDATA[<h2 id="自定义导航栏"><a href="#自定义导航栏" class="headerlink" title="自定义导航栏"></a>自定义导航栏</h2><ol>
+<li>现在<code>app.json</code> 文件中把导航栏属性改为自定义</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attr">&quot;window&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;navigationStyle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;custom&quot;</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
 
-<p>在此配置中，<code>pureDataPattern</code> 表示所有以 <code>_</code> 开头的数据字段会被认为是纯数据，不会影响视图渲染。</p>
-<h3 id="规则说明"><a href="#规则说明" class="headerlink" title="规则说明"></a><strong>规则说明</strong></h3><ul>
-<li><code>pureDataPattern</code> 是一个正则表达式，用于匹配那些不参与视图渲染的数据字段。</li>
-<li>当符合正则表达式的字段发生变化时，视图层将忽略这些字段的更新，从而避免视图层不必要的性能开销。</li>
-</ul>
-<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a><strong>配置示例</strong></h3><p>如果我们在一个小程序页面的 <code>data</code> 中声明了以下数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    _somePrivateData: 123,  // 不需要视图更新的数据</span><br><span class="line">    visibleData: &#x27;This is visible&#x27;  // 会影响视图的数据</span><br><span class="line">  &#125;,</span><br><span class="line">  // 数据更新时，只有 visibleData 会触发视图更新</span><br><span class="line">  updateData() &#123;</span><br><span class="line">    this.setData(&#123;</span><br><span class="line">      _somePrivateData: Math.random(),</span><br><span class="line">      visibleData: &#x27;Updated visible data&#x27;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>然后再<code>app.js</code>文件中调用<code>wx.getWindowInfo()</code> 接口，全局获取手机顶部状态栏的高度，如果要把高度大小单位换算成rpx，则还需获取屏幕宽度，运用公式进行换算</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="title class_">App</span>(&#123;</span><br><span class="line">  <span class="title function_">onLaunch</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> windowInfo = wx.<span class="title function_">getWindowInfo</span>()</span><br><span class="line">    <span class="keyword">const</span> statusBarHeight=windowInfo.<span class="property">statusBarHeight</span></span><br><span class="line">    <span class="keyword">const</span> screenWidth=windowInfo.<span class="property">screenWidth</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">globalData</span>.<span class="property">navBarHeight</span> = statusBarHeight*<span class="number">750</span>/screenWidth + <span class="number">96</span>;</span><br><span class="line">    <span class="comment">// console.log(statusBarHeight*750/screenWidth + 96);</span></span><br><span class="line">    </span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">globalData</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: <span class="number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>通过配置 <code>pureDataPattern</code>，像 <code>_somePrivateData</code> 这样以 <code>_</code> 开头的数据更新时不会引起视图的重新渲染，而 <code>visibleData</code> 的更新会触发视图更新。</p>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a><strong>注意事项</strong></h3><ul>
-<li>纯数据字段的更新不会影响视图的重渲染，但如果需要该数据在视图中显示，必须确保它不符合 <code>pureDataPattern</code> 的规则。</li>
-<li>使用 <code>pureDataPattern</code> 仅适用于特定场景，过度使用可能导致预期之外的行为，因为视图层无法感知到这些数据的变化。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><code>pureDataPattern</code> 是微信小程序的一项性能优化机制，用于声明不影响视图渲染的纯数据字段。合理使用可以减少不必要的视图更新，从而提升性能，尤其在处理频繁的数据变化时非常有用。</p>
-]]></content>
+<p>这里设置自定义导航栏高度为96rpx</p>
+<ol start="3">
+<li><p>在对应页面的<code>js</code>文件中获取<code>app.js</code>中的全局导航栏+手机状态栏高度大小</p>
+ <figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pages/home/home.js</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">getApp</span>();</span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 页面的初始数据</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"><span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: app.<span class="property">globalData</span>.<span class="property">navBarHeight</span>,</span><br><span class="line">    <span class="attr">tabBarHeight</span>: app.<span class="property">globalData</span>.<span class="property">tabBarHeight</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>navBar</code>组件的<code>wxml</code>文件中引入自定义导航栏</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">t-navbar</span></span></span><br><span class="line"><span class="tag">  <span class="attr">t-class-placeholder</span>=<span class="string">&quot;t-navbar-placeholder&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">t-class-content</span>=<span class="string">&quot;t-navbar-content&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">class</span>=<span class="string">&quot;custom-navbar&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">title</span>=<span class="string">&quot;标题文字&quot;</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br><span class="line">//页面主要内容margin-top值为app.js中获取到的导航栏加手机状态栏的高度</span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;home&quot;</span> <span class="attr">style</span>=<span class="string">&quot;margin-top:&#123;&#123;navBarHeight&#125;&#125;rpx;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span>&gt;</span>pages/home/home.wxml<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.custom-navbar</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="comment">/* height: 100px !important; */</span></span><br><span class="line">  <span class="attr">--td-navbar-color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attr">--td-navbar-bg-color</span>: <span class="number">#0052d9</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="自定义TabBar"><a href="#自定义TabBar" class="headerlink" title="自定义TabBar"></a>自定义<code>TabBar</code></h2><ol>
+<li>现在<code>app.json</code> 文件中把<code>tabBa</code>r属性改为自定义</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="attr">&quot;tabBar&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;custom&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;list&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/home/home&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;首页&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/form/form&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;工单&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>然后再<code>app.js</code>文件中调用<code>wx.getWindowInfo()</code> 接口，全局获取手机顶部状态栏的高度，如果要把高度大小单位换算成rpx，则还需获取屏幕宽度，运用公式进行换算</li>
+</ol>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/0dba967f-2d6c-43ba-b3c3-386e6a153bfa/80e1047f-a362-4028-b8cb-bce7525731fc/image.png" alt="image.png"></p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="title class_">App</span>(&#123;</span><br><span class="line">  <span class="title function_">onLaunch</span>(<span class="params"></span>) &#123;</span><br><span class="line">     <span class="keyword">const</span> windowInfo = wx.<span class="title function_">getWindowInfo</span>()</span><br><span class="line">    <span class="keyword">const</span> statusBarHeight=windowInfo.<span class="property">statusBarHeight</span></span><br><span class="line">    <span class="keyword">const</span> screenWidth=windowInfo.<span class="property">screenWidth</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">globalData</span>.<span class="property">navBarHeight</span> = statusBarHeight*<span class="number">750</span>/screenWidth + <span class="number">96</span>;</span><br><span class="line">    <span class="comment">// console.log(statusBarHeight*750/screenWidth + 80);</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">globalData</span>.<span class="property">tabBarHeight</span>=statusBarHeight*<span class="number">750</span>/screenWidth + <span class="number">80</span>;</span><br><span class="line">    </span><br><span class="line">  &#125;,</span><br><span class="line">   <span class="attr">globalData</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">tabBarHeight</span>:<span class="number">0</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里设置自定义导航栏高度为96rpx</p>
+<ol start="3">
+<li><p>在对应页面的<code>js</code>文件中获取<code>app.js</code>中的全局导航栏+手机状态栏高度大小</p>
+ <figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pages/home/home.js</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">getApp</span>();</span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 页面的初始数据</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"> <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">navBarHeight</span>: app.<span class="property">globalData</span>.<span class="property">navBarHeight</span>,</span><br><span class="line">    <span class="attr">tabBarHeight</span>: app.<span class="property">globalData</span>.<span class="property">tabBarHeight</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>tabBar</code>组件的<code>wxml</code>文件中引入自定义导航栏</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--components/tabBar/tabBar.wxml--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">t-tab-bar</span> <span class="attr">t-class</span>=<span class="string">&quot;t-tab-bar&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#123;&#123;active&#125;&#125;&quot;</span> <span class="attr">bindchange</span>=<span class="string">&quot;onChange&quot;</span> <span class="attr">theme</span>=<span class="string">&quot;tag&quot;</span> <span class="attr">split</span>=<span class="string">&quot;&#123;&#123;false&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;t-tab-bar-item wx:for=&quot;&#123;&#123;list&#125;&#125;&quot; wx:key=&quot;value&quot; value=&quot;&#123;&#123;item.value&#125;&#125;&quot; icon=&quot;&#123;&#123;item.icon&#125;&#125;&quot; &gt;</span></span><br><span class="line"><span class="comment">    &#123;&#123;item.label&#125;&#125;</span></span><br><span class="line"><span class="comment">  &lt;/t-tab-bar-item&gt; --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t-tab-bar-item</span>   <span class="attr">value</span>=<span class="string">&quot;label_1&quot;</span> <span class="attr">icon</span>=<span class="string">&quot;home&quot;</span> <span class="attr">data-key</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">    首页</span><br><span class="line">  <span class="tag">&lt;/<span class="name">t-tab-bar-item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t-tab-bar-item</span>   <span class="attr">value</span>=<span class="string">&quot;label_2&quot;</span> <span class="attr">icon</span>=<span class="string">&quot;app&quot;</span> <span class="attr">data-key</span>=<span class="string">&quot;2&quot;</span>&gt;</span></span><br><span class="line">  工单</span><br><span class="line">  <span class="tag">&lt;/<span class="name">t-tab-bar-item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">t-tab-bar</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在tabBar组件的<code>js</code>文件中</p>
+</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// components/tabBar/tabBar.js</span></span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 组件的属性列表</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="attr">properties</span>: &#123;</span><br><span class="line">   <span class="attr">active</span>: &#123;</span><br><span class="line">      <span class="attr">type</span>:<span class="title class_">String</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 组件的初始数据</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">value</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="attr">list</span>: [</span><br><span class="line">      &#123; <span class="attr">value</span>: <span class="string">&#x27;label_1&#x27;</span>, <span class="attr">label</span>: <span class="string">&#x27;首页&#x27;</span>, <span class="attr">icon</span>: <span class="string">&#x27;home&#x27;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">value</span>: <span class="string">&#x27;label_2&#x27;</span>, <span class="attr">label</span>: <span class="string">&#x27;应用&#x27;</span>, <span class="attr">icon</span>: <span class="string">&#x27;app&#x27;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">value</span>: <span class="string">&#x27;label_3&#x27;</span>, <span class="attr">label</span>: <span class="string">&#x27;聊天&#x27;</span>, <span class="attr">icon</span>: <span class="string">&#x27;chat&#x27;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">value</span>: <span class="string">&#x27;label_4&#x27;</span>, <span class="attr">label</span>: <span class="string">&#x27;我的&#x27;</span>, <span class="attr">icon</span>: <span class="string">&#x27;user&#x27;</span> &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 组件的方法列表</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">onChange</span>(<span class="params">e</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">        <span class="attr">value</span>: e.<span class="property">detail</span>.<span class="property">value</span>,</span><br><span class="line">      &#125;);</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">switch</span>(e.<span class="property">detail</span>.<span class="property">value</span>)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;label_1&quot;</span>:</span><br><span class="line">          wx.<span class="title function_">switchTab</span>(&#123; <span class="attr">url</span>: <span class="string">&#x27;/pages/home/home&#x27;</span>, &#125;);</span><br><span class="line">          <span class="comment">// console.log(e.detail.value);</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;label_2&#x27;</span>:</span><br><span class="line">          wx.<span class="title function_">switchTab</span>(&#123; <span class="attr">url</span>: <span class="string">&#x27;/pages/form/form&#x27;</span>, &#125;);</span><br><span class="line">          <span class="comment">// console.log(e.detail.value);</span></span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 在组件实例进入页面节点树时执行</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="title function_">attached</span>(<span class="params"></span>) &#123;</span><br><span class="line">   </span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>在对应页面的wxml文件引入 ，传递状态</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tabBar</span> <span class="attr">active</span>=<span class="string">&quot;label_1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">tabBar</span>&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>前端</category>
         <category>小程序</category>
       </categories>
       <tags>
         <tag>小程序</tag>
+        <tag>微信</tag>
       </tags>
   </entry>
 </search>
