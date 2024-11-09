@@ -1,67 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>小程序中的behaviors</title>
-    <url>/2024/10/30/applet-behaviors/</url>
-    <content><![CDATA[<h1 id="behaviors"><a href="#behaviors" class="headerlink" title="behaviors"></a><strong>behaviors</strong></h1><p>在微信小程序开发中，<code>behaviors</code> 是一种类似于 <strong>“组件继承”</strong> 的机制，允许将公共的代码（如数据、方法、生命周期函数等）抽离到一个单独的模块，然后让多个组件或页面去复用这些代码。<code>behaviors</code> 类似于 React 中的 **<code>mixins</code>**，用于代码的复用和模块化。</p>
-<h3 id="1-behaviors-的基本使用"><a href="#1-behaviors-的基本使用" class="headerlink" title="1. behaviors 的基本使用"></a><strong>1. <code>behaviors</code> 的基本使用</strong></h3><h3 id="定义-behavior"><a href="#定义-behavior" class="headerlink" title="定义 behavior"></a><strong>定义 <code>behavior</code></strong></h3><p>可以通过 <code>Behavior</code> 函数来定义一个 <code>behavior</code>，并且像组件一样，<code>behavior</code> 也可以包含 <code>data</code>、<code>methods</code>、生命周期函数等内容。</p>
-<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><p>定义一个 <code>behavior</code>，包含共享的数据和方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 定义一个 behavior，放在 behaviors 文件夹下</span><br><span class="line">module.exports = Behavior(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    sharedData: &#x27;这是共享的数据&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sharedMethod() &#123;</span><br><span class="line">      console.log(&#x27;这是共享的方法&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;组件被附加时调用（behavior 内的生命周期函数）&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>使用这个 <code>behavior</code> 在某个组件中：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 在组件中引入 behavior</span><br><span class="line">const myBehavior = require(&#x27;/behaviors/myBehavior.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [myBehavior],</span><br><span class="line">  data: &#123;</span><br><span class="line">    localData: &#x27;这是组件自身的数据&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    localMethod() &#123;</span><br><span class="line">      console.log(&#x27;这是组件自身的方法&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中，<code>myBehavior</code> 定义了 <code>sharedData</code> 和 <code>sharedMethod</code>，并且在组件中可以直接使用这些共享的内容。</p>
-<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li><code>behavior</code> 中的 <code>data</code> 和 <code>methods</code> 会被合并到使用它的组件中，组件可以直接使用这些属性和方法。</li>
-<li><code>behavior</code> 的生命周期函数（如 <code>attached</code>）也会与组件的生命周期函数一起工作。</li>
-</ul>
-<h3 id="2-多-behaviors-的使用"><a href="#2-多-behaviors-的使用" class="headerlink" title="2. 多 behaviors 的使用"></a><strong>2. 多 <code>behaviors</code> 的使用</strong></h3><p>组件中可以混入多个 <code>behaviors</code>，这些 <code>behaviors</code> 会按照从左到右的顺序进行合并。</p>
-<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码const behaviorA = require(&#x27;/behaviors/behaviorA.js&#x27;);</span><br><span class="line">const behaviorB = require(&#x27;/behaviors/behaviorB.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [behaviorA, behaviorB],</span><br><span class="line">  data: &#123;</span><br><span class="line">    componentData: &#x27;组件数据&#x27;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a><strong>注意：</strong></h3><ul>
-<li>如果多个 <code>behavior</code> 中定义了相同的 <code>data</code> 字段或方法，后定义的 <code>behavior</code> 会覆盖之前的内容（从左到右合并）。</li>
-<li>如果 <code>behavior</code> 和组件本身定义了相同的 <code>data</code> 字段或方法，组件本身的内容会覆盖 <code>behavior</code> 中的内容。</li>
-</ul>
-<h3 id="3-behavior-中的生命周期"><a href="#3-behavior-中的生命周期" class="headerlink" title="3. behavior 中的生命周期"></a><strong>3. <code>behavior</code> 中的生命周期</strong></h3><p><code>behavior</code> 和组件的生命周期函数是可以同时存在的。如果 <code>behavior</code> 和组件都定义了相同的生命周期函数，那么它们会依次执行。</p>
-<h3 id="示例：-2"><a href="#示例：-2" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 定义一个 behavior，含有生命周期函数</span><br><span class="line">const myBehavior = Behavior(&#123;</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;behavior 的 attached&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [myBehavior],</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;组件的 attached&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="输出结果："><a href="#输出结果：" class="headerlink" title="输出结果："></a><strong>输出结果：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arduino复制代码behavior 的 attached</span><br><span class="line">组件的 attached</span><br></pre></td></tr></table></figure>
-
-<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li>先执行 <code>behavior</code> 中的 <code>attached</code>，再执行组件中的 <code>attached</code>。</li>
-<li>如果在 <code>behavior</code> 和组件中定义了相同的生命周期函数，它们都会被依次调用。</li>
-</ul>
-<h3 id="4-behaviors-与组件属性的合并规则"><a href="#4-behaviors-与组件属性的合并规则" class="headerlink" title="4. behaviors 与组件属性的合并规则"></a><strong>4. <code>behaviors</code> 与组件属性的合并规则</strong></h3><ul>
-<li><strong><code>data</code> 合并</strong>：<code>behavior</code> 和组件的 <code>data</code> 会合并成一个对象。如果有相同的字段名，组件的字段会覆盖 <code>behavior</code> 的字段。</li>
-<li><strong><code>methods</code> 合并</strong>：<code>behavior</code> 和组件的 <code>methods</code> 会合并在一起，如果同名，组件的方法会覆盖 <code>behavior</code> 的方法。</li>
-<li><strong><code>lifetimes</code> 合并</strong>：<code>behavior</code> 和组件的生命周期方法会依次调用，不会互相覆盖。</li>
-</ul>
-<h3 id="5-behavior-的应用场景"><a href="#5-behavior-的应用场景" class="headerlink" title="5. behavior 的应用场景"></a><strong>5. <code>behavior</code> 的应用场景</strong></h3><p><code>behaviors</code> 通常用于以下场景：</p>
-<ul>
-<li><strong>组件复用</strong>：当多个组件有相似的功能时，可以将公共的代码抽离出来放到 <code>behavior</code> 中，减少重复代码。</li>
-<li><strong>数据共享</strong>：<code>behavior</code> 可以用于组件之间共享某些公共的数据或方法。</li>
-<li><strong>生命周期逻辑复用</strong>：如果多个组件有相同的生命周期逻辑，可以通过 <code>behavior</code> 来统一管理。</li>
-</ul>
-<h3 id="6-示例：计数器-behavior"><a href="#6-示例：计数器-behavior" class="headerlink" title="6. 示例：计数器 behavior"></a><strong>6. 示例：计数器 <code>behavior</code></strong></h3><p>定义一个可以用于多个组件的计数器 <code>behavior</code>，包括计数器数据和增加计数的功能。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// behaviors/counter.js</span><br><span class="line">module.exports = Behavior(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    count: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    increaseCount() &#123;</span><br><span class="line">      this.setData(&#123;</span><br><span class="line">        count: this.data.count + 1</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>在两个不同的组件中使用这个 <code>behavior</code>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// componentA.js</span><br><span class="line">const counterBehavior = require(&#x27;/behaviors/counter.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [counterBehavior],</span><br><span class="line">  methods: &#123;</span><br><span class="line">    handleTap() &#123;</span><br><span class="line">      this.increaseCount();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">javascript复制代码// componentB.js</span><br><span class="line">const counterBehavior = require(&#x27;/behaviors/counter.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [counterBehavior],</span><br><span class="line">  methods: &#123;</span><br><span class="line">    handleButtonClick() &#123;</span><br><span class="line">      this.increaseCount();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>这样，<code>componentA</code> 和 <code>componentB</code> 都拥有了计数功能，而无需重复代码。</p>
-<hr>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><code>behaviors</code> 是微信小程序中提供的一种复用代码的方式，可以将数据、方法、生命周期等共享逻辑抽离出来，实现组件之间的逻辑复用。通过 <code>behaviors</code>，可以让组件的开发更加模块化、简洁化，提高代码的复用性和维护性。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>GSAP时间线Timeline</title>
     <url>/2024/11/04/GSAP-Timeline/</url>
     <content><![CDATA[<h1 id="时间轴"><a href="#时间轴" class="headerlink" title="时间轴"></a>时间轴</h1><p><a href="https://gsap.com/docs/v3/GSAP/Timeline"><strong>时间轴</strong></a>是一种功能强大的排序工具，可充当补间和其他时间轴的容器，从而可以轻松地整体控制它们并精确管理它们的时间。如果没有时间轴，构建复杂的序列会更加麻烦，因为您需要为每个动画使用**<code>delay</code>** 。例如：</p>
@@ -151,22 +90,6 @@
       <tags>
         <tag>GSAP</tag>
         <tag>动画库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>小程序项目配置---全局request及错误处理</title>
-    <url>/2024/10/30/applet-config-Global%20request%20and%20handleerror/</url>
-    <content><![CDATA[<h1 id="全局request及错误处理"><a href="#全局request及错误处理" class="headerlink" title="全局request及错误处理"></a>全局request及错误处理</h1><p>以下是对小程序项目进行全局request及错误处理</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// request.js</span></span><br><span class="line"><span class="keyword">import</span> handleErrors <span class="keyword">from</span> <span class="string">&#x27;./handleErrors&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> baseURL = <span class="string">&#x27;http://117.72.95.156:8080/api&#x27;</span>; <span class="comment">// 基础 URL</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">request</span> = (<span class="params">options</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// console.log(options);</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 请求拦截器</span></span><br><span class="line">    <span class="keyword">const</span> token = wx.<span class="title function_">getStorageSync</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (token) &#123;</span><br><span class="line">      options.<span class="property">header</span> = &#123;</span><br><span class="line">        ...options.<span class="property">header</span>,</span><br><span class="line">        <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置完整的 URL</span></span><br><span class="line">    <span class="comment">// options.url = baseURL + (endpoints[options.endpoint] || options.endpoint);</span></span><br><span class="line">    options.<span class="property">url</span> = baseURL + options.<span class="property">endpoint</span>;</span><br><span class="line">    options.<span class="property">timeout</span>=options.<span class="property">timeout</span>||<span class="number">5000</span>;</span><br><span class="line">    wx.<span class="title function_">request</span>(&#123;</span><br><span class="line">      ...options,</span><br><span class="line">      <span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 响应拦截器</span></span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">statusCode</span> === <span class="number">200</span>) &#123;</span><br><span class="line">          <span class="title function_">resolve</span>(res.<span class="property">data</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="title function_">handleErrors</span>(res); <span class="comment">// 处理错误</span></span><br><span class="line">          <span class="title function_">reject</span>(res);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">fail</span>: <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">handleErrors</span>(error); <span class="comment">// 处理请求错误</span></span><br><span class="line">        <span class="title function_">reject</span>(error);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  request,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// handleErrors.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Notify</span> <span class="keyword">from</span> <span class="string">&#x27;../miniprogram_npm/@vant/weapp/notify/notify&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleErrors</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(error);</span><br><span class="line">  <span class="keyword">if</span> (error.<span class="property">data</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; status &#125; = error.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// console.log(status);</span></span><br><span class="line">    <span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">500</span> &amp;&amp; status &lt; <span class="number">600</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">`服务器错误: <span class="subst">$&#123;status&#125;</span>`</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: `服务器错误: $&#123;status&#125;`,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">403</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">&quot;禁止访问: 403 Forbidden&quot;</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: &quot;禁止访问: 403 Forbidden&quot;,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">404</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">&quot;未找到: 404 Not Found&quot;</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: &quot;未找到: 404 Not Found&quot;,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>: <span class="string">`错误状态码: <span class="subst">$&#123;status&#125;</span>`</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: `错误状态码: $&#123;status&#125;`,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (error.<span class="property">request</span>) &#123;</span><br><span class="line">    <span class="title class_">Notify</span>(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&quot;请求发出, 网络错误&quot;</span>,</span><br><span class="line">      <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">    <span class="comment">//   title: &quot;请求发出, 网络错误&quot;,</span></span><br><span class="line">    <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">    <span class="comment">//   duration: 2000</span></span><br><span class="line">    <span class="comment">// &#125;)</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title class_">Notify</span>(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&quot;请求错误: &quot;</span> + error.<span class="property">errMsg</span>,</span><br><span class="line">      <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">    <span class="comment">//   title: &quot;请求错误: &quot; + error.errMsg,</span></span><br><span class="line">    <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">    <span class="comment">//   duration: 2000</span></span><br><span class="line">    <span class="comment">// &#125;)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> handleErrors;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-        <category>项目配置</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-        <tag>配置</tag>
       </tags>
   </entry>
   <entry>
@@ -290,6 +213,133 @@
       <tags>
         <tag>GSAP</tag>
         <tag>动画库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序中bindtap和bindsync区别</title>
+    <url>/2024/10/30/applet-bindtap%20and%20bindsync/</url>
+    <content><![CDATA[<h1 id="bindtap和bindsync区别"><a href="#bindtap和bindsync区别" class="headerlink" title="bindtap和bindsync区别"></a><strong>bindtap和bindsync区别</strong></h1><p>在小程序开发中，<code>bindsync</code> 和 <code>bindtap</code> 是两种常用的事件绑定方式，它们的用途和行为略有不同：</p>
+<h3 id="1-bindtap"><a href="#1-bindtap" class="headerlink" title="1. bindtap"></a><strong>1. <code>bindtap</code></strong></h3><p><code>bindtap</code> 是用来监听用户的点击（或触摸）事件，等同于点击事件处理器。它用于捕捉用户的点击操作，并执行相应的回调函数。</p>
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
+<li><code>bindtap</code> 是绑定点击事件的事件处理器。</li>
+<li>点击元素时会触发这个事件，执行相应的逻辑。</li>
+<li>常用于按钮、图片、文字等点击交互场景。</li>
+</ul>
+<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;view bindtap=&quot;handleTap&quot;&gt;点击我&lt;/view&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  handleTap() &#123;</span><br><span class="line">    console.log(&#x27;你点击了这个元素&#x27;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li>当用户点击 <code>&lt;view&gt;</code> 元素时，<code>handleTap</code> 函数将被触发，打印出相应的内容。</li>
+</ul>
+<h3 id="捕获和冒泡："><a href="#捕获和冒泡：" class="headerlink" title="捕获和冒泡："></a><strong>捕获和冒泡：</strong></h3><ul>
+<li><code>bindtap</code> 默认支持事件冒泡，也就是说，子元素的点击事件会向上冒泡到父元素。</li>
+<li>如果不希望事件冒泡，可以使用 <code>catchtap</code>。</li>
+</ul>
+<hr>
+<h3 id="2-bindsync"><a href="#2-bindsync" class="headerlink" title="2. bindsync"></a><strong>2. <code>bindsync</code></strong></h3><p><code>bindsync</code> 是专门用于 <strong>双向绑定</strong> 的属性，通常用于表单组件中，实现数据的实时同步更新。</p>
+<h3 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
+<li><code>bindsync</code> 是用于数据的双向绑定，能够实时同步用户输入和数据模型。</li>
+<li>当用户在表单控件中输入或修改值时，数据会自动同步到绑定的数据源。</li>
+<li>常见于表单组件，如 <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> 等。</li>
+</ul>
+<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;input bindinput=&quot;onInputChange&quot; bindsync=&quot;value&quot; /&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    value: &#x27;&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  onInputChange(e) &#123;</span><br><span class="line">    console.log(&#x27;当前输入框的值为：&#x27;, e.detail.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li>用户在输入框中输入时，<code>value</code> 会与输入框的内容实时同步，且可以通过双向绑定的机制实时获取或更新数据。</li>
+<li><code>bindsync</code> 使得在复杂表单中，数据与视图的绑定更加方便。</li>
+</ul>
+<hr>
+<h3 id="3-区别总结"><a href="#3-区别总结" class="headerlink" title="3. 区别总结"></a><strong>3. 区别总结</strong></h3><ul>
+<li>**<code>bindtap</code>**：是用于 <strong>单向绑定</strong> 点击事件的事件处理器。当用户点击某个元素时，触发回调逻辑。</li>
+<li>**<code>bindsync</code>**：是用于 <strong>双向绑定</strong> 表单数据的绑定方式，可以实时同步数据源和视图的输入内容。</li>
+</ul>
+<h3 id="常见使用场景："><a href="#常见使用场景：" class="headerlink" title="常见使用场景："></a><strong>常见使用场景：</strong></h3><ul>
+<li>**<code>bindtap</code>**：用户点击按钮、图片、文本时触发的操作（如导航、提交等）。</li>
+<li>**<code>bindsync</code>**：表单中使用，保持数据的实时更新，例如输入框内容和页面数据保持同步。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序中的behaviors</title>
+    <url>/2024/10/30/applet-behaviors/</url>
+    <content><![CDATA[<h1 id="behaviors"><a href="#behaviors" class="headerlink" title="behaviors"></a><strong>behaviors</strong></h1><p>在微信小程序开发中，<code>behaviors</code> 是一种类似于 <strong>“组件继承”</strong> 的机制，允许将公共的代码（如数据、方法、生命周期函数等）抽离到一个单独的模块，然后让多个组件或页面去复用这些代码。<code>behaviors</code> 类似于 React 中的 **<code>mixins</code>**，用于代码的复用和模块化。</p>
+<h3 id="1-behaviors-的基本使用"><a href="#1-behaviors-的基本使用" class="headerlink" title="1. behaviors 的基本使用"></a><strong>1. <code>behaviors</code> 的基本使用</strong></h3><h3 id="定义-behavior"><a href="#定义-behavior" class="headerlink" title="定义 behavior"></a><strong>定义 <code>behavior</code></strong></h3><p>可以通过 <code>Behavior</code> 函数来定义一个 <code>behavior</code>，并且像组件一样，<code>behavior</code> 也可以包含 <code>data</code>、<code>methods</code>、生命周期函数等内容。</p>
+<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><p>定义一个 <code>behavior</code>，包含共享的数据和方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 定义一个 behavior，放在 behaviors 文件夹下</span><br><span class="line">module.exports = Behavior(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    sharedData: &#x27;这是共享的数据&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sharedMethod() &#123;</span><br><span class="line">      console.log(&#x27;这是共享的方法&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;组件被附加时调用（behavior 内的生命周期函数）&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用这个 <code>behavior</code> 在某个组件中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 在组件中引入 behavior</span><br><span class="line">const myBehavior = require(&#x27;/behaviors/myBehavior.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [myBehavior],</span><br><span class="line">  data: &#123;</span><br><span class="line">    localData: &#x27;这是组件自身的数据&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    localMethod() &#123;</span><br><span class="line">      console.log(&#x27;这是组件自身的方法&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>myBehavior</code> 定义了 <code>sharedData</code> 和 <code>sharedMethod</code>，并且在组件中可以直接使用这些共享的内容。</p>
+<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li><code>behavior</code> 中的 <code>data</code> 和 <code>methods</code> 会被合并到使用它的组件中，组件可以直接使用这些属性和方法。</li>
+<li><code>behavior</code> 的生命周期函数（如 <code>attached</code>）也会与组件的生命周期函数一起工作。</li>
+</ul>
+<h3 id="2-多-behaviors-的使用"><a href="#2-多-behaviors-的使用" class="headerlink" title="2. 多 behaviors 的使用"></a><strong>2. 多 <code>behaviors</code> 的使用</strong></h3><p>组件中可以混入多个 <code>behaviors</code>，这些 <code>behaviors</code> 会按照从左到右的顺序进行合并。</p>
+<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码const behaviorA = require(&#x27;/behaviors/behaviorA.js&#x27;);</span><br><span class="line">const behaviorB = require(&#x27;/behaviors/behaviorB.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [behaviorA, behaviorB],</span><br><span class="line">  data: &#123;</span><br><span class="line">    componentData: &#x27;组件数据&#x27;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a><strong>注意：</strong></h3><ul>
+<li>如果多个 <code>behavior</code> 中定义了相同的 <code>data</code> 字段或方法，后定义的 <code>behavior</code> 会覆盖之前的内容（从左到右合并）。</li>
+<li>如果 <code>behavior</code> 和组件本身定义了相同的 <code>data</code> 字段或方法，组件本身的内容会覆盖 <code>behavior</code> 中的内容。</li>
+</ul>
+<h3 id="3-behavior-中的生命周期"><a href="#3-behavior-中的生命周期" class="headerlink" title="3. behavior 中的生命周期"></a><strong>3. <code>behavior</code> 中的生命周期</strong></h3><p><code>behavior</code> 和组件的生命周期函数是可以同时存在的。如果 <code>behavior</code> 和组件都定义了相同的生命周期函数，那么它们会依次执行。</p>
+<h3 id="示例：-2"><a href="#示例：-2" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// 定义一个 behavior，含有生命周期函数</span><br><span class="line">const myBehavior = Behavior(&#123;</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;behavior 的 attached&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [myBehavior],</span><br><span class="line">  lifetimes: &#123;</span><br><span class="line">    attached() &#123;</span><br><span class="line">      console.log(&#x27;组件的 attached&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出结果："><a href="#输出结果：" class="headerlink" title="输出结果："></a><strong>输出结果：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arduino复制代码behavior 的 attached</span><br><span class="line">组件的 attached</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
+<li>先执行 <code>behavior</code> 中的 <code>attached</code>，再执行组件中的 <code>attached</code>。</li>
+<li>如果在 <code>behavior</code> 和组件中定义了相同的生命周期函数，它们都会被依次调用。</li>
+</ul>
+<h3 id="4-behaviors-与组件属性的合并规则"><a href="#4-behaviors-与组件属性的合并规则" class="headerlink" title="4. behaviors 与组件属性的合并规则"></a><strong>4. <code>behaviors</code> 与组件属性的合并规则</strong></h3><ul>
+<li><strong><code>data</code> 合并</strong>：<code>behavior</code> 和组件的 <code>data</code> 会合并成一个对象。如果有相同的字段名，组件的字段会覆盖 <code>behavior</code> 的字段。</li>
+<li><strong><code>methods</code> 合并</strong>：<code>behavior</code> 和组件的 <code>methods</code> 会合并在一起，如果同名，组件的方法会覆盖 <code>behavior</code> 的方法。</li>
+<li><strong><code>lifetimes</code> 合并</strong>：<code>behavior</code> 和组件的生命周期方法会依次调用，不会互相覆盖。</li>
+</ul>
+<h3 id="5-behavior-的应用场景"><a href="#5-behavior-的应用场景" class="headerlink" title="5. behavior 的应用场景"></a><strong>5. <code>behavior</code> 的应用场景</strong></h3><p><code>behaviors</code> 通常用于以下场景：</p>
+<ul>
+<li><strong>组件复用</strong>：当多个组件有相似的功能时，可以将公共的代码抽离出来放到 <code>behavior</code> 中，减少重复代码。</li>
+<li><strong>数据共享</strong>：<code>behavior</code> 可以用于组件之间共享某些公共的数据或方法。</li>
+<li><strong>生命周期逻辑复用</strong>：如果多个组件有相同的生命周期逻辑，可以通过 <code>behavior</code> 来统一管理。</li>
+</ul>
+<h3 id="6-示例：计数器-behavior"><a href="#6-示例：计数器-behavior" class="headerlink" title="6. 示例：计数器 behavior"></a><strong>6. 示例：计数器 <code>behavior</code></strong></h3><p>定义一个可以用于多个组件的计数器 <code>behavior</code>，包括计数器数据和增加计数的功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// behaviors/counter.js</span><br><span class="line">module.exports = Behavior(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    count: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    increaseCount() &#123;</span><br><span class="line">      this.setData(&#123;</span><br><span class="line">        count: this.data.count + 1</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在两个不同的组件中使用这个 <code>behavior</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript复制代码// componentA.js</span><br><span class="line">const counterBehavior = require(&#x27;/behaviors/counter.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [counterBehavior],</span><br><span class="line">  methods: &#123;</span><br><span class="line">    handleTap() &#123;</span><br><span class="line">      this.increaseCount();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">javascript复制代码// componentB.js</span><br><span class="line">const counterBehavior = require(&#x27;/behaviors/counter.js&#x27;);</span><br><span class="line"></span><br><span class="line">Component(&#123;</span><br><span class="line">  behaviors: [counterBehavior],</span><br><span class="line">  methods: &#123;</span><br><span class="line">    handleButtonClick() &#123;</span><br><span class="line">      this.increaseCount();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这样，<code>componentA</code> 和 <code>componentB</code> 都拥有了计数功能，而无需重复代码。</p>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><code>behaviors</code> 是微信小程序中提供的一种复用代码的方式，可以将数据、方法、生命周期等共享逻辑抽离出来，实现组件之间的逻辑复用。通过 <code>behaviors</code>，可以让组件的开发更加模块化、简洁化，提高代码的复用性和维护性。</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小程序项目配置---全局request及错误处理</title>
+    <url>/2024/10/30/applet-config-Global%20request%20and%20handleerror/</url>
+    <content><![CDATA[<h1 id="全局request及错误处理"><a href="#全局request及错误处理" class="headerlink" title="全局request及错误处理"></a>全局request及错误处理</h1><p>以下是对小程序项目进行全局request及错误处理</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// request.js</span></span><br><span class="line"><span class="keyword">import</span> handleErrors <span class="keyword">from</span> <span class="string">&#x27;./handleErrors&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> baseURL = <span class="string">&#x27;http://117.72.95.156:8080/api&#x27;</span>; <span class="comment">// 基础 URL</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">request</span> = (<span class="params">options</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// console.log(options);</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 请求拦截器</span></span><br><span class="line">    <span class="keyword">const</span> token = wx.<span class="title function_">getStorageSync</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (token) &#123;</span><br><span class="line">      options.<span class="property">header</span> = &#123;</span><br><span class="line">        ...options.<span class="property">header</span>,</span><br><span class="line">        <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置完整的 URL</span></span><br><span class="line">    <span class="comment">// options.url = baseURL + (endpoints[options.endpoint] || options.endpoint);</span></span><br><span class="line">    options.<span class="property">url</span> = baseURL + options.<span class="property">endpoint</span>;</span><br><span class="line">    options.<span class="property">timeout</span>=options.<span class="property">timeout</span>||<span class="number">5000</span>;</span><br><span class="line">    wx.<span class="title function_">request</span>(&#123;</span><br><span class="line">      ...options,</span><br><span class="line">      <span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 响应拦截器</span></span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">statusCode</span> === <span class="number">200</span>) &#123;</span><br><span class="line">          <span class="title function_">resolve</span>(res.<span class="property">data</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="title function_">handleErrors</span>(res); <span class="comment">// 处理错误</span></span><br><span class="line">          <span class="title function_">reject</span>(res);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">fail</span>: <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">handleErrors</span>(error); <span class="comment">// 处理请求错误</span></span><br><span class="line">        <span class="title function_">reject</span>(error);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  request,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// handleErrors.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Notify</span> <span class="keyword">from</span> <span class="string">&#x27;../miniprogram_npm/@vant/weapp/notify/notify&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleErrors</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(error);</span><br><span class="line">  <span class="keyword">if</span> (error.<span class="property">data</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; status &#125; = error.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// console.log(status);</span></span><br><span class="line">    <span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">500</span> &amp;&amp; status &lt; <span class="number">600</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">`服务器错误: <span class="subst">$&#123;status&#125;</span>`</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: `服务器错误: $&#123;status&#125;`,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">403</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">&quot;禁止访问: 403 Forbidden&quot;</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: &quot;禁止访问: 403 Forbidden&quot;,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">404</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>:<span class="string">&quot;未找到: 404 Not Found&quot;</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: &quot;未找到: 404 Not Found&quot;,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">        <span class="title class_">Notify</span>(&#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>: <span class="string">`错误状态码: <span class="subst">$&#123;status&#125;</span>`</span>,</span><br><span class="line">          <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">        <span class="comment">//   title: `错误状态码: $&#123;status&#125;`,</span></span><br><span class="line">        <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">        <span class="comment">//   duration: 2000</span></span><br><span class="line">        <span class="comment">// &#125;)</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (error.<span class="property">request</span>) &#123;</span><br><span class="line">    <span class="title class_">Notify</span>(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&quot;请求发出, 网络错误&quot;</span>,</span><br><span class="line">      <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">    <span class="comment">//   title: &quot;请求发出, 网络错误&quot;,</span></span><br><span class="line">    <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">    <span class="comment">//   duration: 2000</span></span><br><span class="line">    <span class="comment">// &#125;)</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title class_">Notify</span>(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&quot;请求错误: &quot;</span> + error.<span class="property">errMsg</span>,</span><br><span class="line">      <span class="attr">duration</span>: <span class="number">2000</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// wx.showToast(&#123;</span></span><br><span class="line">    <span class="comment">//   title: &quot;请求错误: &quot; + error.errMsg,</span></span><br><span class="line">    <span class="comment">//   icon: &#x27;error&#x27;,</span></span><br><span class="line">    <span class="comment">//   duration: 2000</span></span><br><span class="line">    <span class="comment">// &#125;)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> handleErrors;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>前端</category>
+        <category>小程序</category>
+        <category>项目配置</category>
+      </categories>
+      <tags>
+        <tag>小程序</tag>
+        <tag>配置</tag>
       </tags>
   </entry>
   <entry>
@@ -469,56 +519,6 @@
 </ul>
 <hr>
 <p>这些组件涵盖了微信小程序开发中的常见需求，提供了视图、表单、媒体、导航等各种功能，开发者可以根据具体业务场景灵活使用这些组件构建小程序。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>小程序</category>
-      </categories>
-      <tags>
-        <tag>小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>小程序中bindtap和bindsync区别</title>
-    <url>/2024/10/30/applet-bindtap%20and%20bindsync/</url>
-    <content><![CDATA[<h1 id="bindtap和bindsync区别"><a href="#bindtap和bindsync区别" class="headerlink" title="bindtap和bindsync区别"></a><strong>bindtap和bindsync区别</strong></h1><p>在小程序开发中，<code>bindsync</code> 和 <code>bindtap</code> 是两种常用的事件绑定方式，它们的用途和行为略有不同：</p>
-<h3 id="1-bindtap"><a href="#1-bindtap" class="headerlink" title="1. bindtap"></a><strong>1. <code>bindtap</code></strong></h3><p><code>bindtap</code> 是用来监听用户的点击（或触摸）事件，等同于点击事件处理器。它用于捕捉用户的点击操作，并执行相应的回调函数。</p>
-<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
-<li><code>bindtap</code> 是绑定点击事件的事件处理器。</li>
-<li>点击元素时会触发这个事件，执行相应的逻辑。</li>
-<li>常用于按钮、图片、文字等点击交互场景。</li>
-</ul>
-<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;view bindtap=&quot;handleTap&quot;&gt;点击我&lt;/view&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  handleTap() &#123;</span><br><span class="line">    console.log(&#x27;你点击了这个元素&#x27;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li>当用户点击 <code>&lt;view&gt;</code> 元素时，<code>handleTap</code> 函数将被触发，打印出相应的内容。</li>
-</ul>
-<h3 id="捕获和冒泡："><a href="#捕获和冒泡：" class="headerlink" title="捕获和冒泡："></a><strong>捕获和冒泡：</strong></h3><ul>
-<li><code>bindtap</code> 默认支持事件冒泡，也就是说，子元素的点击事件会向上冒泡到父元素。</li>
-<li>如果不希望事件冒泡，可以使用 <code>catchtap</code>。</li>
-</ul>
-<hr>
-<h3 id="2-bindsync"><a href="#2-bindsync" class="headerlink" title="2. bindsync"></a><strong>2. <code>bindsync</code></strong></h3><p><code>bindsync</code> 是专门用于 <strong>双向绑定</strong> 的属性，通常用于表单组件中，实现数据的实时同步更新。</p>
-<h3 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a><strong>特点：</strong></h3><ul>
-<li><code>bindsync</code> 是用于数据的双向绑定，能够实时同步用户输入和数据模型。</li>
-<li>当用户在表单控件中输入或修改值时，数据会自动同步到绑定的数据源。</li>
-<li>常见于表单组件，如 <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> 等。</li>
-</ul>
-<h3 id="示例：-1"><a href="#示例：-1" class="headerlink" title="示例："></a><strong>示例：</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">html</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">&lt;input bindinput=&quot;onInputChange&quot; bindsync=&quot;value&quot; /&gt;</span><br><span class="line">javascript复制代码Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    value: &#x27;&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  onInputChange(e) &#123;</span><br><span class="line">    console.log(&#x27;当前输入框的值为：&#x27;, e.detail.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="解析：-1"><a href="#解析：-1" class="headerlink" title="解析："></a><strong>解析：</strong></h3><ul>
-<li>用户在输入框中输入时，<code>value</code> 会与输入框的内容实时同步，且可以通过双向绑定的机制实时获取或更新数据。</li>
-<li><code>bindsync</code> 使得在复杂表单中，数据与视图的绑定更加方便。</li>
-</ul>
-<hr>
-<h3 id="3-区别总结"><a href="#3-区别总结" class="headerlink" title="3. 区别总结"></a><strong>3. 区别总结</strong></h3><ul>
-<li>**<code>bindtap</code>**：是用于 <strong>单向绑定</strong> 点击事件的事件处理器。当用户点击某个元素时，触发回调逻辑。</li>
-<li>**<code>bindsync</code>**：是用于 <strong>双向绑定</strong> 表单数据的绑定方式，可以实时同步数据源和视图的输入内容。</li>
-</ul>
-<h3 id="常见使用场景："><a href="#常见使用场景：" class="headerlink" title="常见使用场景："></a><strong>常见使用场景：</strong></h3><ul>
-<li>**<code>bindtap</code>**：用户点击按钮、图片、文本时触发的操作（如导航、提交等）。</li>
-<li>**<code>bindsync</code>**：表单中使用，保持数据的实时更新，例如输入框内容和页面数据保持同步。</li>
-</ul>
 ]]></content>
       <categories>
         <category>前端</category>
@@ -710,24 +710,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/10/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>小程序中pureDataPattern优化设置</title>
     <url>/2024/10/30/applet-pureDataPattern/</url>
     <content><![CDATA[<h1 id="pureDataPattern优化设置"><a href="#pureDataPattern优化设置" class="headerlink" title="pureDataPattern优化设置"></a><strong><code>pureDataPattern</code>优化设置</strong></h1><h1 id="pureDataPattern"><a href="#pureDataPattern" class="headerlink" title="pureDataPattern"></a><strong><code>pureDataPattern</code></strong></h1><p><code>pureDataPattern</code> 是微信小程序的一项优化设置，旨在提高页面性能，特别是在数据频繁更新时。如果页面的数据变化不涉及与渲染相关的逻辑（例如更新纯粹的业务数据而不是视图），可以通过配置 <code>pureDataPattern</code> 来告知小程序引擎哪些数据不需要参与视图层的 diff（对比计算）。</p>
@@ -761,6 +743,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2024/10/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>react项目配置---全局axios及错误处理</title>
     <url>/2024/10/30/react-config-GlobalAxios-handleerror/</url>
     <content><![CDATA[<h1 id="全局axios及错误处理（react）"><a href="#全局axios及错误处理（react）" class="headerlink" title="全局axios及错误处理（react）"></a>全局axios及错误处理（react）</h1><p>以下是对项目进行全局axios配置及错误处理，以react为例</p>
@@ -769,8 +769,8 @@
 <figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/utils/handleError.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; message &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleErrors</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error.<span class="property">response</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; status &#125; = error.<span class="property">response</span>;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">200</span> &amp;&amp; status &lt; <span class="number">300</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status &gt;= <span class="number">500</span> &amp;&amp; status &lt; <span class="number">600</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`服务器错误: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">403</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;禁止访问: 403 Forbidden&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> status === <span class="number">404</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">&quot;未找到: 404 Not Found&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="attr">default</span>:</span><br><span class="line">        message.<span class="title function_">error</span>(<span class="string">`错误状态码: <span class="subst">$&#123;status&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (error.<span class="property">request</span>) &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求发出, 网络错误&quot;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    message.<span class="title function_">error</span>(<span class="string">&quot;请求错误: &quot;</span> + error.<span class="property">message</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> handleErrors;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>前端</category>
-        <category>项目配置</category>
         <category>react</category>
+        <category>项目配置</category>
       </categories>
       <tags>
         <tag>配置</tag>
