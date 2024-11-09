@@ -33,6 +33,10 @@
       link: https://zeabur.com/zh-CN
       avatar: https://th.bing.com/th/id/OIP.4mHErFxETLI9mWjLiTdDLwHaHa?w=152&h=180&c=7&r=0&o=5&pid=1.7
       descr: 自动化部署服务平台
+    - name: vercel
+      link: https://vercel.com/
+      avatar: https://img2.baidu.com/it/u=1120431854,1251829931&fm=253&fmt=auto&app=138&f=JPEG?w=599&h=338
+      descr: 自动化部署服务平台
 
 - class_name: 动画库
   # class_desc: 值得推荐的网站
