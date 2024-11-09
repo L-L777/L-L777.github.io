@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>小程序的三大API | L.Lのblog</title><meta name="author" content="L.L"><meta name="copyright" content="L.L"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="小程序3大API微信小程序提供了三大类 API，涵盖了各种功能，帮助开发者实现业务需求。具体如下： 1. 界面 API（UI APIs）这些 API 主要用于控制小程序的界面行为和视觉效果，如导航、交互反馈、菜单控制等。 常用的界面 API 包括：  导航栏相关 wx.setNavigationBarTitle：设置当前页面的标题。 wx.setNavigationBarColor：设置导航栏颜色">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序的三大API">
+<meta property="og:url" content="https://l-l777.github.io/2024/10/30/applet-three%20API/index.html">
+<meta property="og:site_name" content="L.Lのblog">
+<meta property="og:description" content="小程序3大API微信小程序提供了三大类 API，涵盖了各种功能，帮助开发者实现业务需求。具体如下： 1. 界面 API（UI APIs）这些 API 主要用于控制小程序的界面行为和视觉效果，如导航、交互反馈、菜单控制等。 常用的界面 API 包括：  导航栏相关 wx.setNavigationBarTitle：设置当前页面的标题。 wx.setNavigationBarColor：设置导航栏颜色">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500">
+<meta property="article:published_time" content="2024-10-30T12:53:49.000Z">
+<meta property="article:modified_time" content="2024-10-30T13:26:44.696Z">
+<meta property="article:author" content="L.L">
+<meta property="article:tag" content="小程序">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500"><link rel="shortcut icon" href="https://img0.baidu.com/it/u=1538176586,3819719694&fm=253&fmt=auto&app=138&f=JPEG?w=220&h=289"><link rel="canonical" href="https://l-l777.github.io/2024/10/30/applet-three%20API/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小程序的三大API',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-30 21:26:44'
+}</script><link rel="stylesheet" href="/css/background.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.gif" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://img0.baidu.com/it/u=3291332156,2373920352&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=890&amp;h=500);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">L.Lのblog</span></a><a class="nav-page-title" href="/"><span class="site-name">小程序的三大API</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">小程序的三大API</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-30T12:53:49.000Z" title="发表于 2024-10-30 20:53:49">2024-10-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-30T13:26:44.696Z" title="更新于 2024-10-30 21:26:44">2024-10-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/">小程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="小程序3大API"><a href="#小程序3大API" class="headerlink" title="小程序3大API"></a>小程序3大API</h1><p>微信小程序提供了三大类 API，涵盖了各种功能，帮助开发者实现业务需求。具体如下：</p>
+<h3 id="1-界面-API（UI-APIs）"><a href="#1-界面-API（UI-APIs）" class="headerlink" title="1. 界面 API（UI APIs）"></a>1. <strong>界面 API（UI APIs）</strong></h3><p>这些 API 主要用于控制小程序的界面行为和视觉效果，如导航、交互反馈、菜单控制等。</p>
+<p><strong>常用的界面 API 包括：</strong></p>
+<ul>
+<li><strong>导航栏相关</strong><ul>
+<li><code>wx.setNavigationBarTitle</code>：设置当前页面的标题。</li>
+<li><code>wx.setNavigationBarColor</code>：设置导航栏颜色。</li>
+</ul>
+</li>
+<li><strong>界面交互</strong><ul>
+<li><code>wx.showToast</code>：显示提示框，短暂提示用户某个操作成功或失败。</li>
+<li><code>wx.showLoading</code>：显示加载中的提示框，常用于异步请求时提示用户等待。</li>
+<li><code>wx.hideLoading</code>：隐藏 <code>wx.showLoading</code> 触发的加载框。</li>
+<li><code>wx.showModal</code>：显示模态弹窗，提示用户确认或取消某个操作。</li>
+<li><code>wx.showActionSheet</code>：显示操作菜单，允许用户从多个选项中选择。</li>
+</ul>
+</li>
+<li><strong>导航控制</strong><ul>
+<li><code>wx.navigateTo</code>：跳转到新页面，保留当前页面。</li>
+<li><code>wx.redirectTo</code>：跳转到新页面，关闭当前页面。</li>
+<li><code>wx.switchTab</code>：跳转到指定的 Tab 页面。</li>
+<li><code>wx.navigateBack</code>：返回上一个页面，支持返回多级页面。</li>
+<li><code>wx.reLaunch</code>：关闭所有页面并打开到指定页面。</li>
+</ul>
+</li>
+<li><strong>下拉刷新</strong><ul>
+<li><code>wx.startPullDownRefresh</code>：主动触发页面下拉刷新效果。</li>
+<li><code>wx.stopPullDownRefresh</code>：停止当前页面的下拉刷新效果。</li>
+</ul>
+</li>
+<li><strong>背景及菜单</strong><ul>
+<li><code>wx.setBackgroundColor</code>：设置页面的背景颜色。</li>
+<li><code>wx.setBackgroundTextStyle</code>：设置下拉刷新背景文字样式。</li>
+<li><code>wx.showShareMenu</code>：显示分享按钮。</li>
+<li><code>wx.hideShareMenu</code>：隐藏分享按钮。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">showToast</span>(&#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;操作成功&#x27;</span>,</span><br><span class="line">  <span class="attr">icon</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">2000</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据-API（Data-APIs）"><a href="#2-数据-API（Data-APIs）" class="headerlink" title="2. 数据 API（Data APIs）"></a>2. <strong>数据 API（Data APIs）</strong></h3><p>数据 API 涵盖了获取和存储数据的功能，主要用于与后端服务器通信、缓存数据、本地存储等。</p>
+<p><strong>常用的数据 API 包括：</strong></p>
+<ul>
+<li><strong>网络请求</strong><ul>
+<li><code>wx.request</code>：发送 HTTP 请求，支持 GET、POST 等方法。</li>
+<li><code>wx.uploadFile</code>：将本地文件上传到服务器。</li>
+<li><code>wx.downloadFile</code>：从服务器下载文件。</li>
+</ul>
+</li>
+<li><strong>WebSocket</strong><ul>
+<li><code>wx.connectSocket</code>：创建 WebSocket 连接，用于实时通讯。</li>
+<li><code>wx.onSocketOpen</code>：监听 WebSocket 连接打开事件。</li>
+<li><code>wx.sendSocketMessage</code>：通过 WebSocket 发送消息。</li>
+<li><code>wx.closeSocket</code>：关闭 WebSocket 连接。</li>
+</ul>
+</li>
+<li><strong>文件系统</strong><ul>
+<li><code>wx.getFileSystemManager</code>：获取文件系统管理器，用于管理文件读写操作。</li>
+<li><code>wx.saveFile</code>：将文件保存到本地。</li>
+<li><code>wx.getSavedFileList</code>：获取本地已保存的文件列表。</li>
+</ul>
+</li>
+<li><strong>本地存储</strong><ul>
+<li><code>wx.setStorageSync</code>：同步设置本地存储的数据。</li>
+<li><code>wx.getStorageSync</code>：同步获取本地存储的数据。</li>
+<li><code>wx.clearStorageSync</code>：清空本地存储的所有数据。</li>
+</ul>
+</li>
+<li><strong>数据库</strong><ul>
+<li>小程序还支持云开发，利用云数据库进行数据存储和查询。</li>
+<li><code>wx.cloud.database</code>：获取云数据库的引用。</li>
+<li><code>db.collection()</code>：获取云数据库中的集合。</li>
+<li><code>collection.add()</code>：向集合中添加数据。</li>
+<li><code>collection.get()</code>：从集合中查询数据。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">request</span>(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;https://api.example.com/data&#x27;</span>,</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">data</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">fail</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-设备-API（Device-APIs）"><a href="#3-设备-API（Device-APIs）" class="headerlink" title="3. 设备 API（Device APIs）"></a>3. <strong>设备 API（Device APIs）</strong></h3><p>设备 API 提供了与用户设备交互的功能，如系统信息、网络状态、蓝牙、Wi-Fi 等操作。</p>
+<p><strong>常用的设备 API 包括：</strong></p>
+<ul>
+<li><strong>系统信息</strong><ul>
+<li><code>wx.getSystemInfo</code>：获取设备系统信息，如屏幕尺寸、操作系统、微信版本等。</li>
+<li><code>wx.getSystemInfoSync</code>：同步获取系统信息。</li>
+</ul>
+</li>
+<li><strong>网络状态</strong><ul>
+<li><code>wx.getNetworkType</code>：获取设备的网络类型（如 Wi-Fi、2G、3G、4G）。</li>
+<li><code>wx.onNetworkStatusChange</code>：监听网络状态变化事件。</li>
+</ul>
+</li>
+<li><strong>位置</strong><ul>
+<li><code>wx.getLocation</code>：获取用户的当前位置，经纬度、速度等信息。</li>
+<li><code>wx.chooseLocation</code>：打开地图选择位置。</li>
+<li><code>wx.openLocation</code>：使用内置地图打开指定的地理位置。</li>
+</ul>
+</li>
+<li><strong>蓝牙</strong><ul>
+<li><code>wx.openBluetoothAdapter</code>：初始化蓝牙模块。</li>
+<li><code>wx.startBluetoothDevicesDiscovery</code>：开始搜索附近的蓝牙设备。</li>
+<li><code>wx.connectBLEDevice</code>：连接低功耗蓝牙设备。</li>
+</ul>
+</li>
+<li><strong>Wi-Fi</strong><ul>
+<li><code>wx.startWifi</code>：初始化 Wi-Fi 模块。</li>
+<li><code>wx.getConnectedWifi</code>：获取当前连接的 Wi-Fi 信息。</li>
+</ul>
+</li>
+<li><strong>电量</strong><ul>
+<li><code>wx.getBatteryInfo</code>：获取设备电量信息。</li>
+<li><code>wx.onBatteryInfoChange</code>：监听电量变化。</li>
+</ul>
+</li>
+<li><strong>震动</strong><ul>
+<li><code>wx.vibrateLong</code>：使手机发生长震动。</li>
+<li><code>wx.vibrateShort</code>：使手机发生短震动。</li>
+</ul>
+</li>
+<li><strong>扫码</strong><ul>
+<li><code>wx.scanCode</code>：调用相机扫码功能，支持二维码和条形码。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">javascript</span><br><span class="line">复制代码</span><br><span class="line">wx.<span class="title function_">getSystemInfo</span>(&#123;</span><br><span class="line">  <span class="title function_">success</span>(<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">model</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">pixelRatio</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowWidth</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowHeight</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>微信小程序的三大类 API 提供了从界面控制、数据交互到设备访问的广泛功能支持。通过灵活运用这些 API，开发者可以实现小程序的各种功能，如页面导航、网络请求、系统状态获取等，构建功能强大且体验流畅的小程序应用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://l-l777.github.io/">L.L</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://l-l777.github.io/2024/10/30/applet-three%20API/">https://l-l777.github.io/2024/10/30/applet-three API/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://l-l777.github.io" target="_blank">L.Lのblog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/">小程序</a></div><div class="post-share"><div class="social-share" data-image="https://img2.baidu.com/it/u=534490904,3498620580&amp;fm=253&amp;fmt=auto&amp;app=120&amp;f=JPEG?w=750&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/alipay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/10/30/applet-pageChange/" title="小程序页面切换的本质"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&amp;fm=253&amp;fmt=auto&amp;app=120&amp;f=JPEG?w=750&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">小程序页面切换的本质</div></div><div class="info-2"><div class="info-item-1">小程序页面切换本质在微信小程序中，页面切换的本质可以归结为 页面栈的管理 和 视图的重新渲染。微信小程序通过一个栈来管理用户的页面跳转，当用户在不同页面之间切换时，小程序会将每个页面的路由推入或弹出页面栈，从而实现页面切换。具体分为以下几个方面： 1. 页面栈管理小程序在内存中维护了一个页面栈来管理当前活动的页面和之前访问过的页面。页面栈可以理解为一个数据结构，其中栈底是最先加载的页面，栈顶是当前活动的页面。 a. push 新页面到页面栈当用户从一个页面导航到另一个页面时（如通过 wx.navigateTo），新的页面会被推入到页面栈的顶部。旧页面仍然保留在栈中，等待用户返回时恢复。 b. pop 出页面当用户通过 wx.navigateBack 返回上一个页面时，当前页面会从栈顶弹出，被销毁，之前的页面成为新的栈顶并重新渲染。 c. replace 当前页面通过 wx.redirectTo，当前页面会被替换，新的页面不会被推入页面栈，而是替换当前页面，这时页面栈的大小保持不变。 d. 重设页面栈通过...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-nine%20%20module/" title="小程序的九大组件"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&amp;fm=253&amp;fmt=auto&amp;app=120&amp;f=JPEG?w=750&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">小程序的九大组件</div></div><div class="info-2"><div class="info-item-1">官方定义的九大组件微信小程序提供了丰富的基础组件，官方定义了九大类基础组件，帮助开发者快速构建功能丰富的用户界面。下面是这些组件的详细介绍： 1. 视图容器类组件（View Components） view：容器组件，类似于 HTML 中的 &lt;div&gt;，用于承载其他组件。 属性：hover-class（点击时的样式）、hover-stop-propagation（阻止点击冒泡）等。 用途：布局和排版。   scroll-view：可滚动的视图区域，支持横向或纵向滚动。 属性：scroll-x、scroll-y 控制滚动方向。 用途：实现长列表、图片滑动等功能。   swiper：滑块视图容器，允许在多个子元素之间滑动。 属性：autoplay（自动播放）、interval（播放间隔）、circular（循环播放）。 用途：实现轮播图或幻灯片效果。   movable-view &amp; movable-area：用于创建可移动的视图组件，支持拖拽。 用途：实现可拖拽的元素，例如地图上的标记或自定义拖动控件。   cover-view &amp;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/10/30/applet-behaviors/" title="小程序中的behaviors"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序中的behaviors</div></div><div class="info-2"><div class="info-item-1">behaviors在微信小程序开发中，behaviors 是一种类似于 “组件继承” 的机制，允许将公共的代码（如数据、方法、生命周期函数等）抽离到一个单独的模块，然后让多个组件或页面去复用这些代码。behaviors 类似于 React 中的 **mixins**，用于代码的复用和模块化。 1. behaviors 的基本使用定义 behavior可以通过 Behavior 函数来定义一个 behavior，并且像组件一样，behavior 也可以包含 data、methods、生命周期函数等内容。 示例：定义一个 behavior，包含共享的数据和方法： 12345678910111213141516javascript复制代码// 定义一个 behavior，放在 behaviors 文件夹下module.exports = Behavior(&#123;  data: &#123;    sharedData: &#x27;这是共享的数据&#x27;  &#125;,  methods: &#123;    sharedMethod() &#123;     ...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-config-Global%20request%20and%20handleerror/" title="小程序项目配置---全局request及错误处理"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138&f=PNG?w=320&h=320" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序项目配置---全局request及错误处理</div></div><div class="info-2"><div class="info-item-1">全局request及错误处理以下是对小程序项目进行全局request及错误处理 1234567891011121314151617181920212223242526272829303132333435363738394041424344// request.jsimport handleErrors from &#x27;./handleErrors&#x27;;const baseURL = &#x27;http://117.72.95.156:8080/api&#x27;; // 基础 URLconst request = (options) =&gt; &#123;  // console.log(options);  return new Promise((resolve, reject) =&gt; &#123;    // 请求拦截器    const token = wx.getStorageSync(&#x27;token&#x27;);    if (token) &#123;      options.header = &#123;       ...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-config-Global%20websocket/" title="小程序项目配置---全局websocket"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138&f=PNG?w=320&h=320" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序项目配置---全局websocket</div></div><div class="info-2"><div class="info-item-1">全局websocket（微信小程序）以下是对小程序项目进行全局websocket配置 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111//websocket.jslet socket = null;const listeners = [];let heartbeatInterval = null;const HEARTBEAT_INTERVAL = 10000; // 10秒心跳间隔const WEB_SOCKET_URL = &#x27;ws://117.72.95.156:8080/ws&#x27;;function connectWebSocket(url) &#123; ...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-nine%20%20module/" title="小程序的九大组件"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序的九大组件</div></div><div class="info-2"><div class="info-item-1">官方定义的九大组件微信小程序提供了丰富的基础组件，官方定义了九大类基础组件，帮助开发者快速构建功能丰富的用户界面。下面是这些组件的详细介绍： 1. 视图容器类组件（View Components） view：容器组件，类似于 HTML 中的 &lt;div&gt;，用于承载其他组件。 属性：hover-class（点击时的样式）、hover-stop-propagation（阻止点击冒泡）等。 用途：布局和排版。   scroll-view：可滚动的视图区域，支持横向或纵向滚动。 属性：scroll-x、scroll-y 控制滚动方向。 用途：实现长列表、图片滑动等功能。   swiper：滑块视图容器，允许在多个子元素之间滑动。 属性：autoplay（自动播放）、interval（播放间隔）、circular（循环播放）。 用途：实现轮播图或幻灯片效果。   movable-view &amp; movable-area：用于创建可移动的视图组件，支持拖拽。 用途：实现可拖拽的元素，例如地图上的标记或自定义拖动控件。   cover-view &amp;...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-bindtap%20and%20bindsync/" title="小程序中bindtap和bindsync区别"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序中bindtap和bindsync区别</div></div><div class="info-2"><div class="info-item-1">bindtap和bindsync区别在小程序开发中，bindsync 和 bindtap 是两种常用的事件绑定方式，它们的用途和行为略有不同： 1. bindtapbindtap 是用来监听用户的点击（或触摸）事件，等同于点击事件处理器。它用于捕捉用户的点击操作，并执行相应的回调函数。 特点： bindtap 是绑定点击事件的事件处理器。 点击元素时会触发这个事件，执行相应的逻辑。 常用于按钮、图片、文字等点击交互场景。  示例：123456789html复制代码&lt;view bindtap=&quot;handleTap&quot;&gt;点击我&lt;/view&gt;javascript复制代码Page(&#123;  handleTap() &#123;    console.log(&#x27;你点击了这个元素&#x27;);  &#125;&#125;);  解析： 当用户点击 &lt;view&gt; 元素时，handleTap 函数将被触发，打印出相应的内容。  捕获和冒泡： bindtap...</div></div></div></a><a class="pagination-related" href="/2024/10/30/applet-pageChange/" title="小程序页面切换的本质"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&fm=253&fmt=auto&app=120&f=JPEG?w=750&h=500" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-30</div><div class="info-item-2">小程序页面切换的本质</div></div><div class="info-2"><div class="info-item-1">小程序页面切换本质在微信小程序中，页面切换的本质可以归结为 页面栈的管理 和 视图的重新渲染。微信小程序通过一个栈来管理用户的页面跳转，当用户在不同页面之间切换时，小程序会将每个页面的路由推入或弹出页面栈，从而实现页面切换。具体分为以下几个方面： 1. 页面栈管理小程序在内存中维护了一个页面栈来管理当前活动的页面和之前访问过的页面。页面栈可以理解为一个数据结构，其中栈底是最先加载的页面，栈顶是当前活动的页面。 a. push 新页面到页面栈当用户从一个页面导航到另一个页面时（如通过 wx.navigateTo），新的页面会被推入到页面栈的顶部。旧页面仍然保留在栈中，等待用户返回时恢复。 b. pop 出页面当用户通过 wx.navigateBack 返回上一个页面时，当前页面会从栈顶弹出，被销毁，之前的页面成为新的栈顶并重新渲染。 c. replace 当前页面通过 wx.redirectTo，当前页面会被替换，新的页面不会被推入页面栈，而是替换当前页面，这时页面栈的大小保持不变。 d. 重设页面栈通过...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.gif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">L.L</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/L-L777"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/L-L777" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=728831102&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #379be6;"></i></a><a class="social-icon" href="https://weixin.qq.com" target="_blank" title="WeChat"><i class="fab fa-weixin" style="color: #00ff00;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站为L.L的个人博客网</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%A8%8B%E5%BA%8F3%E5%A4%A7API"><span class="toc-number">1.</span> <span class="toc-text">小程序3大API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%95%8C%E9%9D%A2-API%EF%BC%88UI-APIs%EF%BC%89"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 界面 API（UI APIs）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE-API%EF%BC%88Data-APIs%EF%BC%89"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. 数据 API（Data APIs）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AE%BE%E5%A4%87-API%EF%BC%88Device-APIs%EF%BC%89"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. 设备 API（Device APIs）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.0.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/07/weixin%20applet-self%20navBar%20and%20tabBar/" title="微信小程序自定义导航栏和TabBar（用了Tdesign组件库）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.baidu.com/it/u=534490904,3498620580&amp;fm=253&amp;fmt=auto&amp;app=120&amp;f=JPEG?w=750&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="微信小程序自定义导航栏和TabBar（用了Tdesign组件库）"/></a><div class="content"><a class="title" href="/2024/11/07/weixin%20applet-self%20navBar%20and%20tabBar/" title="微信小程序自定义导航栏和TabBar（用了Tdesign组件库）">微信小程序自定义导航栏和TabBar（用了Tdesign组件库）</a><time datetime="2024-11-07T11:45:16.000Z" title="发表于 2024-11-07 19:45:16">2024-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/04/GSAP-Timeline/" title="GSAP时间线Timeline"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GSAP时间线Timeline"/></a><div class="content"><a class="title" href="/2024/11/04/GSAP-Timeline/" title="GSAP时间线Timeline">GSAP时间线Timeline</a><time datetime="2024-11-04T12:43:53.000Z" title="发表于 2024-11-04 20:43:53">2024-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/04/GSAP-basic/" title="GSAP基础入门"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img0.baidu.com/it/u=2064138448,2586463179&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1000&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GSAP基础入门"/></a><div class="content"><a class="title" href="/2024/11/04/GSAP-basic/" title="GSAP基础入门">GSAP基础入门</a><time datetime="2024-11-04T08:27:36.000Z" title="发表于 2024-11-04 16:27:36">2024-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/30/applet-config-Global%20websocket/" title="小程序项目配置---全局websocket"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=PNG?w=320&amp;h=320" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小程序项目配置---全局websocket"/></a><div class="content"><a class="title" href="/2024/10/30/applet-config-Global%20websocket/" title="小程序项目配置---全局websocket">小程序项目配置---全局websocket</a><time datetime="2024-10-30T13:18:06.000Z" title="发表于 2024-10-30 21:18:06">2024-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/30/applet-config-Global%20request%20and%20handleerror/" title="小程序项目配置---全局request及错误处理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.baidu.com/it/u=3719565749,2440019383&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=PNG?w=320&amp;h=320" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小程序项目配置---全局request及错误处理"/></a><div class="content"><a class="title" href="/2024/10/30/applet-config-Global%20request%20and%20handleerror/" title="小程序项目配置---全局request及错误处理">小程序项目配置---全局request及错误处理</a><time datetime="2024-10-30T13:15:24.000Z" title="发表于 2024-10-30 21:15:24">2024-10-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://img2.baidu.com/it/u=3368405033,1886662875&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=888&amp;h=500);"><div id="footer-wrap"><div class="copyright">&copy;2024 By L.L</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">welcome to L.Lの blog</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
