@@ -1,5 +1,5 @@
 ---
-title: 小程序项目配置---全局request及错误处理
+title: 小程序项目配置---全局request及错误处理(简易)
 date: 2024-10-30 21:15:24
 tags: ["小程序","配置"]
 categories: 
