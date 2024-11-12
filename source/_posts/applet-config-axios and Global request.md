@@ -115,7 +115,7 @@ cover: https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138
             complete: (res) => {
               // 请求完成以后做一些事情
               if (this.afterRequest && typeof this.afterRequest === 'function') {
-                this.afterRequest(res);
+                this.afterRequest(res, resolve, reject);
               }
             }
           });
