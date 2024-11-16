@@ -208,8 +208,13 @@ public static void main(String[] args) throws InterruptedException {
      //name
       WebElement kw_input = driver.findElement(By.name("kw"));
     ```
-    
-- xpath路径
+- xpath 
+```java
+//用xpath获取节点
+driver.findElement(By.xpath("/html/body/div[1]/div[3]/div/div/div[2]/div/div[1]/div/div[3]/button"));
+//  XPath使用//选择符来选择当前节点下的所有后代节点，然后找到文本内容为“17”的<strong>标签。
+ driver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[2]/div[1]/ul[2]//strong[text()='17']")).click();
+```
 
 ## **操作测试对象**
 
