@@ -12,119 +12,135 @@ cover: https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138
 ## 1. 在`utils`文件夹里创建一个`request.js`文件，创建一个`request`类封装`axios`并且导出
     
     ```jsx
-    // request.js
-    // 封装axios
-    class Request {
-      constructor(options = {}) {
-        // 请求的根路径
-        this.baseUrl = options.baseUrl || '';
-        // 请求的 url 地址
-        this.url = options.url || '';
-        // 请求方式
-        this.method = 'GET';
-        // 请求的参数对象
-        this.data = null;
-        // header 请求头
-        this.header = options.header || {};
-        this.beforeRequest = null;
-        this.afterRequest = null;
-        this.errRequest = null;
+   // 封装axios
+class axios {
+  constructor(options = {}) {
+    // 请求的根路径
+    this.baseUrl = options.baseUrl || '';
+    // 请求的 url 地址
+    this.url = options.url || '';
+    // 请求方式
+    this.method = 'GET';
+    // 请求的参数对象
+    this.data = null;
+    // header 请求头
+    this.header = options.header || {};
+    this.beforeRequest = null;
+    this.afterRequest = null;
+    this.errRequest = null;
+  }
+
+  // 添加对header的支持
+  _mergeHeaders(customHeader = {}) {
+    return Object.assign({}, this.header, customHeader); // 合并默认header和自定义header
+  }
+
+  get(url, data = {}, header = {}) {
+    // 清空 header 对象
+    this.header = {};
+    this.method = 'GET';
+    this.url = this.baseUrl + url;
+    this.data = data;
+    this.header = this._mergeHeaders(header); // 合并header
+    return this._sendRequest();
+  }
+
+  post(url, data = {}, header = {}) {
+    // 清空 header 对象
+    this.header = {};
+    this.method = 'POST';
+    this.url = this.baseUrl + url;
+    this.data = data;
+    this.header = this._mergeHeaders(header); // 合并header
+    return this._sendRequest();
+  }
+
+  put(url, data = {}, header = {}) {
+    // 清空 header 对象
+    this.header = {};
+    this.method = 'PUT';
+    this.url = this.baseUrl + url;
+    this.data = data;
+    this.header = this._mergeHeaders(header); // 合并header
+    return this._sendRequest();
+  }
+
+  delete(url, data = {}, header = {}) {
+    // 清空 header 对象
+    this.header = {};
+    this.method = 'DELETE';
+    this.url = this.baseUrl + url;
+    this.data = data;
+    this.header = this._mergeHeaders(header); // 合并header
+    return this._sendRequest();
+  }
+
+  _sendRequest(beforeResolve, beforeReject) {
+    // console.log( beforeResolve);
+    // 请求之前做一些事
+    if (this.beforeRequest && typeof this.beforeRequest === 'function') {
+      this.beforeRequest(this);
+    }
+    // 发起请求
+    return new Promise((resolve, reject) => {
+      // console.log(resolve);
+      if(typeof(beforeResolve)!=='function'){
+        beforeResolve=resolve
+        beforeReject=reject
       }
-    
-      // 添加对header的支持
-      _mergeHeaders(customHeader = {}) {
-        return Object.assign({}, this.header, customHeader); // 合并默认header和自定义header
-      }
-    
-      get(url, data = {}, header = {}) {
-        // 清空 header 对象
-        this.header = {};
-        this.method = 'GET';
-        this.url = this.baseUrl + url;
-        this.data = data;
-        this.header = this._mergeHeaders(header); // 合并header
-        return this._sendRequest();
-      }
-    
-      post(url, data = {}, header = {}) {
-        // 清空 header 对象
-        this.header = {};
-        this.method = 'POST';
-        this.url = this.baseUrl + url;
-        this.data = data;
-        this.header = this._mergeHeaders(header); // 合并header
-        return this._sendRequest();
-      }
-    
-      put(url, data = {}, header = {}) {
-        // 清空 header 对象
-        this.header = {};
-        this.method = 'PUT';
-        this.url = this.baseUrl + url;
-        this.data = data;
-        this.header = this._mergeHeaders(header); // 合并header
-        return this._sendRequest();
-      }
-    
-      delete(url, data = {}, header = {}) {
-        // 清空 header 对象
-        this.header = {};
-        this.method = 'DELETE';
-        this.url = this.baseUrl + url;
-        this.data = data;
-        this.header = this._mergeHeaders(header); // 合并header
-        return this._sendRequest();
-      }
-    
-      _sendRequest() {
-        // 请求之前做一些事
-        if (this.beforeRequest && typeof this.beforeRequest === 'function') {
-          this.beforeRequest(this);
-        }
-        // 发起请求
-        return new Promise((resolve, reject) => {
-          wx.request({
+      wx.request({
+        url: this.url,
+        method: this.method,
+        data: this.data,
+        header: this.header,
+        success: (res) => {
+          // console.log(res);
+          // console.log( beforeResolve);
+          if (res.statusCode === 200) {
+            beforeResolve(res.data);
+          } else if(res.statusCode === 401){
+            const config = {
+              url: this.url,
+              method: this.method,
+              data: this.data,
+              header: this.header,
+            };
+            res.config = config;
+          }else {
+            const config = {
+              url: this.url,
+              method: this.method,
+              data: this.data,
+              header: this.header,
+            };
+            res.config = config;
+            beforeReject(res);
+          }
+        },
+        fail: (err) => {
+          // console.log(err);
+          const config = {
             url: this.url,
             method: this.method,
             data: this.data,
             header: this.header,
-            success: (res) => {
-              if (res.statusCode === 200) {
-                resolve(res.data);
-              } else {
-                const config = {
-                  url: this.url,
-                  method: this.method,
-                  data: this.data,
-                  header: this.header,
-                };
-                res.config = config;
-                reject(res);
-              }
-            },
-            fail: (err) => {
-              const config = {
-                url: this.url,
-                method: this.method,
-                data: this.data,
-                header: this.header,
-              };
-              err.config = config;
-              reject(err);
-            },
-            complete: (res) => {
-              // 请求完成以后做一些事情
-              if (this.afterRequest && typeof this.afterRequest === 'function') {
-                this.afterRequest(res, resolve, reject);
-              }
-            }
-          });
-        });
-      }
-    }
-    
-    // const $http = new Request();
-    export default Request;
+          };
+          err.config = config;
+          beforeReject(err);
+        },
+        complete: (res) => {
+          // 请求完成以后做一些事情
+          if (this.afterRequest && typeof this.afterRequest === 'function') {
+            this.afterRequest(res, beforeResolve, beforeReject);
+          }
+        }
+      });
+    });
+  }
+}
+
+// const $http = new axios();
+export default axios;
     ```
     
 
@@ -133,103 +149,116 @@ cover: https://img1.baidu.com/it/u=3719565749,2440019383&fm=253&fmt=auto&app=138
     2. 后向拦截器（响应拦截器），响应之后要做什么，如token无感刷新，token过期自动调用刷新token接口获取新的token，并且重新发送请求
     
     ```jsx
-    // http.js
-    import Request from '../utils/axios.js'; // 引入之前定义的Request类
-    // 创建Request实例并设置为微信小程序的全局变量
-    const $http = new Request({
-      baseUrl: 'https://water.cloudhouse.tech/api' // 设置请求根路径
+    import axios from './axios.js';
+import handleErrors from "./handleError.js"
+const $http = new axios({
+  baseUrl: 'http://117.72.95.156:6100/api' // 设置请求根路径
+});
+wx.$http = $http; // 将$http实例挂载到wx对象上，方便全局访问
+// 请求开始之前做一些事情
+$http.beforeRequest = function(options) {
+  // 获取存储在本地的token
+  const token = wx.getStorageSync('accessToken');
+  // 如果token存在，则添加到请求头中
+  if (token) {
+    this.header['accessToken'] = `${token}`;
+    }
+};
+let isRefreshing = false;
+let requestQueue=[];
+let refreshCount=0
+let Max_refresh=10;
+// 请求完成之后做一些事情
+$http.afterRequest = async function(res, resolve, reject) {
+  // console.log('isRefreshing', isRefreshing);
+  if (res.statusCode === 401 && !isRefreshing&&refreshCount<=Max_refresh) {
+    console.log('endRequest', res);
+    const config = res.config;
+    console.log(resolve);
+    requestQueue.push({ config, resolve, reject });
+    // console.log(requestQueue[0]);
+    let refreshToken = wx.getStorageSync('refreshToken');
+    console.log('refreshToken');
+    console.log(refreshToken);
+    if (refreshToken === "" || refreshToken === undefined) {
+      // 处理登录过期逻辑
+      handleLoginExpired();
+    } else if (!isRefreshing) {
+      isRefreshing = true;
+      try {
+        const response = await wx.$http.get('/user/refreshToken', {}, { refreshToken });
+        if(response.code===1){
+          refreshCount++
+          console.log(response.data.accessToken);
+          wx.setStorageSync('accessToken', response.data.accessToken);
+          wx.setStorageSync('refreshToken', response.data.refreshToken);
+          console.log(111);
+          // 重试队列中的请求
+          retryQueue();
+        }else{
+          handleLoginExpired() ;
+        }
+        isRefreshing = false;
+      } catch (err) {
+        handleLoginExpired();
+        isRefreshing = false;
+      }
+    }
+  } else if(res.statusCode === 401&&refreshCount>Max_refresh ){
+    // 如果一直刷新token后，获取到的token万一还是过期的，直接退出登录
+    handleLoginExpired();
+  }
+  else {
+    // 正常处理响应
+    if (res.statusCode === 200) {
+      resolve(res.data);
+    } else {
+      handleErrors(res); // 处理请求错误
+      reject(res);
+    }
+  }
+
+  async function handleLoginExpired() {
+    wx.removeStorageSync('refreshToken');
+    wx.removeStorageSync('accessToken');
+    refreshCount = 0;
+    // await wait(500);
+    wx.reLaunch({
+      url: "/pages/index/index"
     });
-    wx.$http = $http; // 将$http实例挂载到wx对象上，方便全局访问
-    
-    // 请求开始之前做一些事情
-    $http.beforeRequest = function(options) {
-       // 获取存储在本地的token
-       const token = wx.getStorageSync('token');
-       // 如果token存在，则添加到请求头中
-       if (token) {
-         this.header['Authorization'] = `Bearer ${token}`;
-       }
-      wx.showLoading({
-        title: '数据加载中...',
+    wx.showToast({
+      title: "登录过期",
+      icon: "error"
+    });
+  }
+
+  async function retryQueue() {
+    while (requestQueue.length > 0) {
+      // console.log(requestQueue[0]);
+      const { config, resolve, reject } = requestQueue.shift();
+      // console.log(config);
+      // console.log(resolve);
+      sendBeforeRequest(config, resolve, reject);
+    }
+  }
+
+  async function sendBeforeRequest(requestConfig,beforeResolve, beforeReject) {
+    // console.log(beforeResolve);
+    Object.assign($http,requestConfig)
+    // console.log($http);
+    $http._sendRequest(beforeResolve, beforeReject)
+      .then((response) => {
+        // console.log(response);
+        // beforeResolve(response.data);
+      })
+      .catch((error) => {
+        // console.log(error);
+        // beforeReject(error);
       });
-    };
-    
-    let isRefreshing = false;
-    let refreshCount = 0;
-    const MAX_REFRESH_COUNT = 5;
-    
-    // 请求完成之后做一些事情
-    $http.afterRequest = async function(res, resolve, reject) {
-      wx.hideLoading();
-      console.log('isRefreshing', isRefreshing);
-      refreshCount++;
-    
-      if (res.statusCode !== 200 && !isRefreshing && refreshCount < MAX_REFRESH_COUNT) {
-        // console.log('endRequest', res);
-        const config = res.config;
-        requestQueue.push(config);
-        let refreshToken = wx.getStorageSync('refreshToken');
-        // console.log('refreshToken');
-        // console.log(refreshToken);
-        if (refreshToken === "" || refreshToken === undefined) {
-          // 处理登录过期逻辑
-          handleLoginExpired();
-        } else if (!isRefreshing) {
-          isRefreshing = true;
-          try {
-            const response = await wx.$http.get('/api/user/user/refreshToken', {}, { refreshToken });
-            // console.log(response);
-            wx.setStorageSync('accessToken', response.data.accessToken);
-            wx.setStorageSync('refreshToken', response.data.refreshToken);
-            // 重试队列中的请求
-            retryQueue();
-            isRefreshing = false;
-          } catch (err) {
-            handleLoginExpired();
-            isRefreshing = false;
-          }
-        }
-      } else {
-        // 正常处理响应
-        if (res.statusCode === 200) {
-          resolve(res.data);
-        } else {
-          reject(res);
-        }
-      }
-    
-      async function handleLoginExpired() {
-        wx.removeStorageSync('refreshToken');
-        wx.removeStorageSync('accessToken');
-        wx.showToast({
-          title: "登录过期",
-          icon: "error"
-        });
-        refreshCount = 0;
-        await wait(500);
-        wx.reLaunch({
-          url: "/pages/login/login"
-        });
-      }
-    
-      async function retryQueue() {
-        while (requestQueue.length > 0) {
-          const queuedRequest = requestQueue.shift();
-          sendRequest(queuedRequest);
-        }
-      }
-    
-      async function sendRequest(requestConfig) {
-        wx.$http._(requestConfig)
-          .then((response) => {
-            requestConfig.resolve(response);
-          })
-          .catch((error) => {
-            requestConfig.reject(error);
-          });
-      }
-    };
-    export default $http;
+  }
+};
+
+export default $http;
     ```
     
 
